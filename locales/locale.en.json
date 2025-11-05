@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "tracks-token-description": "Your token to access Tracks. You can find it under Settings > Authentication",
+    "tracks-token-header": "Token",
+    "tracks-url-description": "Base URL of your instance of Tracks.",
+    "tracks-url-header": "Tracks URL",
+    "tracks-username-description": "Your username to access Tracks.",
+    "tracks-username-header": "Username"
+  },
+  "messages": {
+    "server-http-error": "The server returned an error. HTTP code is {code}",
+    "service-authentication-failed-description": "Unable to authenticate. Please check your settings and verify that the username and token are correct.",
+    "service-authentication-failed-header": "Authentication failed",
+    "service-unreachable-description": "The service cannot be reached. Please check your settings and verify the URL is correct.",
+    "service-unreachable-header": "Service unreachable"
+  }
+}

@@ -3,6 +3,7 @@ import { DEFAULT_SETTINGS, type TracksPluginSettings } from "./settings/Settings
 import { TracksSettingTab } from "./settings/TracksSettingTab";
 import { MainViewModel, VIEW_TYPE_EXAMPLE } from "./views/MainViewModel";
 
+import { setupLocalization } from "./main.localization";
 
 export default class TracksPlugin extends Plugin {
   settings: TracksPluginSettings;
@@ -18,6 +19,7 @@ export default class TracksPlugin extends Plugin {
     });
 
     await this.loadSettings();
+    setupLocalization();
 
     // todo: add command to open views
     // // This adds a simple command that can be triggered anywhere
@@ -67,6 +69,8 @@ export default class TracksPlugin extends Plugin {
     // "Reveal" the leaf in case it is in a collapsed sidebar
     await workspace.revealLeaf(leaf!);
   }
+
+
 }
 
 
