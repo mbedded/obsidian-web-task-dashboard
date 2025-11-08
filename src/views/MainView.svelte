@@ -1,9 +1,10 @@
 <script lang="ts">
-  import TodoContext from "./TodoContext.svelte";
-  import Spinner from "./Spinner.svelte";
   import type { ITodoAdapter } from "../adapters/ITodoAdapter";
-  import Error from "./Error.svelte";
   import { t } from "localizify";
+  import { ContextItem } from "../adapters/TodoClasses";
+  import SpinnerComponent from "./SpinnerComponent.svelte";
+  import ContextComponent from "./ContextComponent.svelte";
+  import ErrorComponent from "./ErrorComponent.svelte";
 
   interface Props {
     adapter: ITodoAdapter;
@@ -19,8 +20,9 @@
   let errorHeader = $state("error-header");
   let errorMessage = $state("error-message");
 
-  let components: string[] = $state([]);
+  let contexts: ContextItem[] = $state([]);
 
+  // todo: use "onMount" instead of external call
   export async function initializeView() {
     loading = true;
     hasError = false;
@@ -48,30 +50,32 @@
       return;
     }
 
-    hasError = true;
-    errorHeader = "alles ok!";
     // Initialize view
+    contexts = await adapter.GetContexts();
 
-
+    loading = false;
   }
 
 </script>
 
+<!-- todo: localize view -->
+
 {#if loading}
-  <Spinner text="Loading tasks…"/>
+  <SpinnerComponent text="Loading contexts…"/>
 {/if}
 
 
 {#if !loading}
-  COMPONENTS
+  <!-- todo: show when context == empty-->
+
+  {#each contexts as context}
+    <ContextComponent adapter={adapter} context={context}/>
+  {/each}
 {/if}
 
 
-<!--{#each components as item}-->
-<!--  <TodoContext text={item}/>-->
-<!--{/each}-->
 {#if hasError}
-  <Error header={errorHeader} message={errorMessage}/>
+  <ErrorComponent header={errorHeader} message={errorMessage}/>
 {/if}
 
 

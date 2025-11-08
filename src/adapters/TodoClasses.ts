@@ -8,7 +8,7 @@ export class TodoItem {
   }
 }
 
-export class Context {
+export class ContextItem {
   public readonly id: number;
   public readonly name: string;
 

@@ -18,7 +18,7 @@
     width: 20px; /* Adjust size as needed */
     height: 20px; /* Adjust size as needed */
     /* We're using obsidian colors here */
-    border: var(--interactive-normal);
+    border: var(--background-modifier-border);
     border-top: 4px solid var(--interactive-accent); /* Accent color */
     border-radius: 50%;
     animation: spin 1.5s linear infinite;
