@@ -6,20 +6,19 @@
   .container {
     display: flex;
     align-items: center;
-    margin-top: 10px; /* Just for some spacing */
+    margin-top: 10px;
   }
 
   .container span {
-    margin-left: 10px; /* Space between spinner and text */
+    margin-left: 10px;
   }
 
   .spinner {
     display: inline-block;
-    width: 20px; /* Adjust size as needed */
-    height: 20px; /* Adjust size as needed */
-    /* We're using obsidian colors here */
-    border: var(--interactive-normal);
-    border-top: 4px solid var(--interactive-accent); /* Accent color */
+    width: 20px;
+    height: 20px;
+    border: var(--background-modifier-border);
+    border-top: 4px solid var(--interactive-accent);
     border-radius: 50%;
     animation: spin 1.5s linear infinite;
   }

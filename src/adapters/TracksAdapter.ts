@@ -1,4 +1,4 @@
-import { Context, PingResult, TodoItem } from "./TodoClasses";
+import { ContextItem, PingResult, TodoItem } from "./TodoClasses";
 import { XMLParser } from 'fast-xml-parser';
 import type { ITodoAdapter } from "./ITodoAdapter";
 import { t } from "localizify";
@@ -6,6 +6,7 @@ import type { RequestUrlParam, RequestUrlResponsePromise } from "obsidian";
 
 export class TracksAdapter implements ITodoAdapter {
 
+  private readonly displayInfo: string;
   private readonly xmlParser = new XMLParser({
     ignoreDeclaration: true
   });
@@ -19,6 +20,7 @@ export class TracksAdapter implements ITodoAdapter {
   constructor(private baseUrl: string,
               private basicToken: string,
               private doRequest: (request: RequestUrlParam | string) => RequestUrlResponsePromise) {
+    this.displayInfo = `TRACKS - ${this.baseUrl}`
   }
 
   // public async Ping(): Promise<PingResult> {
@@ -89,7 +91,7 @@ export class TracksAdapter implements ITodoAdapter {
     }
   }
 
-  public async GetContexts(): Promise<Context[]> {
+  public async GetContexts(): Promise<ContextItem[]> {
     const url = `${this.baseUrl}/contexts.xml`;
 
     const request = new Request(url, {
@@ -112,10 +114,10 @@ export class TracksAdapter implements ITodoAdapter {
       return [];
     }
 
-    const items: Context[] = [];
+    const items: ContextItem[] = [];
 
     for (const item of contextAsJson.contexts.context) {
-      const ctx = new Context(item.id, item.name);
+      const ctx = new ContextItem(item.id, item.name);
       items.push(ctx);
     }
 
@@ -156,4 +158,7 @@ export class TracksAdapter implements ITodoAdapter {
     return items;
   }
 
+  public GetDisplayInfo(): string {
+    return this.displayInfo;
+  }
 }

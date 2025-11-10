@@ -1,8 +1,9 @@
 <script lang="ts">
-  import TodoContext from "./TodoContext.svelte";
-  import Spinner from "./Spinner.svelte";
+  import { ContextItem } from "../adapters/TodoClasses";
+  import SpinnerComponent from "./SpinnerComponent.svelte";
+  import ContextComponent from "./ContextComponent.svelte";
+  import ErrorComponent from "./ErrorComponent.svelte";
   import type { ITodoAdapter } from "../adapters/ITodoAdapter";
-  import Error from "./Error.svelte";
   import { t } from "localizify";
 
   interface Props {
@@ -19,13 +20,12 @@
   let errorHeader = $state("error-header");
   let errorMessage = $state("error-message");
 
-  let components: string[] = $state([]);
+  let contexts: ContextItem[] = $state([]);
 
+  // todo: use "onMount" instead of external call
   export async function initializeView() {
     loading = true;
     hasError = false;
-
-    debugger
 
     // Check if service is reachable
     var pingResult = await adapter.Ping();
@@ -48,31 +48,61 @@
       return;
     }
 
-    hasError = true;
-    errorHeader = "alles ok!";
     // Initialize view
+    contexts = await adapter.GetContexts();
 
-
+    loading = false;
   }
 
 </script>
 
-{#if loading}
-  <Spinner text="Loading tasks…"/>
-{/if}
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  .placeholder {
+    /* todo: use text muted and obsidian css for border */
+    border-top: 1px solid var(--color-base-20);
+    margin-top: auto;
+    align-content: center;
+    color: var(--color-base-50);
+    font-size: 0.7em;
+  }
+</style>
+
+<!-- todo: localize view -->
+
+<div class="container">
+  {#if loading}
+    <SpinnerComponent text="Loading contexts…"/>
+  {/if}
 
 
-{#if !loading}
-  COMPONENTS
-{/if}
+  {#if !loading && !hasError}
+  <!-- todo: show hint  when context == empty-->
+
+  {#each contexts as context}
+    <ContextComponent adapter={adapter} context={context}/>
+  {/each}
+  {/if}
 
 
-<!--{#each components as item}-->
-<!--  <TodoContext text={item}/>-->
-<!--{/each}-->
-{#if hasError}
-  <Error header={errorHeader} message={errorMessage}/>
-{/if}
+  {#if hasError}
+    <ErrorComponent header={errorHeader} message={errorMessage}/>
+    <!-- todo: add reload button so user can press button instead of close/open tab -->
+  {/if}
+
+  <!-- General information for the user -->
+  <div class="placeholder">
+    <p>Backend: {adapter.GetDisplayInfo()}</p>
+  </div>
+
+</div>
+
 
 
 

@@ -1,4 +1,4 @@
-import { Context, PingResult, TodoItem } from "./TodoClasses";
+import { ContextItem, PingResult, TodoItem } from "./TodoClasses";
 
 /**
  * This interface defines the general interfaces for adapters, so any
@@ -19,7 +19,7 @@ export interface ITodoAdapter {
    *
    * @return {Promise<Context[]>} A promise that resolves to an array of context objects.
    */
-  GetContexts(): Promise<Context[]>;
+  GetContexts(): Promise<ContextItem[]>;
 
   /**
    * Retrieves a list of todo items.
@@ -28,4 +28,10 @@ export interface ITodoAdapter {
    */
   GetTodos(): Promise<TodoItem[]>
 
+  /**
+   * Retrieves the information about the adapter for the user.
+   *
+   * @return {string} The information for the user as a string.
+   */
+  GetDisplayInfo(): string;
 }
