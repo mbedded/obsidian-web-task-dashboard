@@ -15,7 +15,7 @@
     adapter,
   }: Props = $props();
 
-  let loading = $state(true);
+  let loading = $state(false);
   let todos: TodoItem[] = $state([]);
 
   onMount(async () => {
@@ -23,14 +23,15 @@
   });
 
   async function initialize() {
-    // todo: check adapter/API: can it filter for context via context-id?
-    // todos = await adapter.GetTodos(context.id);
+    loading = true;
     todos = await adapter.GetActiveTodos(context.id);
     loading = false;
   }
 
-  function markAsDone(todo: TodoItem){
+  async function markAsDone(todo: TodoItem): Promise<boolean> {
+    var result = await adapter.ToggleTodoState(todo.id);
 
+    return Promise.resolve(true);
   }
 
 </script>
@@ -48,26 +49,34 @@
     color: var(--text-normal);
     font-size: var(--font-ui-large);
     line-height: var(--line-height-normal);
+
+    span {
+      color: var(--text-faint);
+    }
   }
 
+  .no-todos-existing {
+    color: var(--text-muted);
+  }
 </style>
 
 <!-- todo: localize view -->
 <div class="container">
-  <p class="header">{context.name}</p>
+  <p class="header">{context.name} <span>({todos.length})</span></p>
 
   {#if loading}
     <SpinnerComponent text="Loading todos…"/>
   {/if}
 
-  {#if todos}
-
+  {#if !!todos && todos.length }
     {#each todos as todo}
-      <TodoComponent todo={todo} markTodoAsDone={markAsDone(todo)}/>
+      <TodoComponent todo={todo} markTodoAsDone={markAsDone}/>
     {/each}
 
   {:else}
-    <p>NO TODOS EXISTING</p>
+    <p class="no-todos-existing">No todos existing</p>
   {/if}
+
+  <!-- todo: add textbox to add/create new todo -->
 
 </div>

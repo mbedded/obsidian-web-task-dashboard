@@ -10,10 +10,6 @@ export class TracksAdapter implements ITodoAdapter {
     ignoreDeclaration: true
   });
 
-  GetDisplayInfo(): string {
-    return `Tracks (${this.baseUrl})`;
-  }
-
   /**
    * Creates a new instance.
    * @param baseUrl The base url to reach Tracks.
@@ -23,6 +19,10 @@ export class TracksAdapter implements ITodoAdapter {
   constructor(private baseUrl: string,
               private basicToken: string,
               private doRequest: (request: RequestUrlParam | string) => RequestUrlResponsePromise) {
+  }
+
+  public GetDisplayInfo(): string {
+    return `Tracks (${this.baseUrl})`;
   }
 
   public async Ping(): Promise<PingResult> {
@@ -62,9 +62,9 @@ export class TracksAdapter implements ITodoAdapter {
     try {
       let response = await this.doRequest({
         url: `${this.baseUrl}/contexts.xml?limit_to_active_todos=1`,
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Authorization': `Basic ${this.basicToken}`
+          "Authorization": `Basic ${this.basicToken}`
         }
       });
 
@@ -102,12 +102,31 @@ export class TracksAdapter implements ITodoAdapter {
       return [];
     }
 
-    if (Array.isArray(todosAsJson?.todos?.todo) == false){
+    if (Array.isArray(todosAsJson?.todos?.todo) == false) {
       return [];
     }
 
     return todosAsJson.todos.todo
       .map((x: any) => new TodoItem(x.id, x.description));
+  }
+
+  public async ToggleTodoState(todoId: number): Promise<boolean> {
+    try {
+      await this.doRequest({
+        // We can use this shortcut to toggle the state between active and completed.
+        url: `${this.baseUrl}/todos/${todoId}/toggle_check.xml`,
+        method: "PUT",
+        headers: {
+          "Authorization": `Basic ${this.basicToken}`,
+          "Content-Type": "text/xml"
+        }
+      });
+
+    } catch (e) {
+      console.error("error toggle todo" + e);
+      return false;
+    }
+    return true;
   }
 
 }

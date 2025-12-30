@@ -33,4 +33,13 @@ export interface ITodoAdapter {
    */
   GetActiveTodos(contextId: number): Promise<TodoItem[]>
 
+
+  /**
+   * Toggles the state of a specific todo item between active and completed.
+   *
+   * @param {number} todoId - The unique identifier of the todo item to toggle..
+   * @return {Promise<boolean>} A promise that resolves to a boolean indicating whether the operation was successful.
+   */
+  ToggleTodoState(todoId: number): Promise<boolean>
+
 }
