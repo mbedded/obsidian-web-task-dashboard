@@ -5,17 +5,18 @@ import MainView from './MainView.svelte';
 import { mount, unmount } from 'svelte';
 import type { ITodoAdapter } from "../adapters/ITodoAdapter";
 
+// todo: change variable/value
 export const VIEW_TYPE_EXAMPLE = 'example-views';
 
 export class MainViewModel extends ItemView {
-  private _todoAdapter: ITodoAdapter;
+  private readonly todoAdapter: ITodoAdapter;
 
 	// A variable to hold on to the MainView instance mounted in this ItemView.
 	mainView: ReturnType<typeof MainView> | undefined;
 
 	constructor(leaf: WorkspaceLeaf, todoAdapter: ITodoAdapter) {
 		super(leaf);
-    this._todoAdapter = todoAdapter;
+    this.todoAdapter = todoAdapter;
   }
 
 	getViewType() {
@@ -23,6 +24,7 @@ export class MainViewModel extends ItemView {
 	}
 
 	getDisplayText() {
+    // todo: verify name. Localization? Read name from manifest?
 		return 'Tracks Plugin';
 	}
 
@@ -31,7 +33,7 @@ export class MainViewModel extends ItemView {
 		this.mainView = mount(MainView, {
 			target: this.contentEl,
 			props: {
-        adapter: this._todoAdapter,
+        adapter: this.todoAdapter,
 			}
 		});
 
