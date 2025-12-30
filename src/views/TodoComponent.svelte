@@ -37,8 +37,8 @@
 </style>
 
 <div class="container">
-  <!-- todo: click mark task as done -->
-  <button type="button" class="btn-done" >
+  <button type="button" class="btn-done" onclick={markDone}>
+    <!-- todo: add icon or something-->
     <!--    <Check/>-->
     Done
   </button>

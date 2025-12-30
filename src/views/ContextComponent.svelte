@@ -25,8 +25,12 @@
   async function initialize() {
     // todo: check adapter/API: can it filter for context via context-id?
     // todos = await adapter.GetTodos(context.id);
-    todos = await adapter.GetTodos();
+    todos = await adapter.GetActiveTodos(context.id);
     loading = false;
+  }
+
+  function markAsDone(todo: TodoItem){
+
   }
 
 </script>
@@ -59,7 +63,7 @@
   {#if todos}
 
     {#each todos as todo}
-      <TodoComponent todo={todo}/>
+      <TodoComponent todo={todo} markTodoAsDone={markAsDone(todo)}/>
     {/each}
 
   {:else}

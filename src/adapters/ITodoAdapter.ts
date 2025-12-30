@@ -7,6 +7,11 @@ import { ContextItem, PingResult, TodoItem } from "./TodoClasses";
 export interface ITodoAdapter {
 
   /**
+   * Returns a human-readable name for the adapter.
+   */
+  GetDisplayInfo(): string;
+
+  /**
    * Sends a ping request to verify connectivity or the responsiveness of a service.
    *
    * @return {Promise<PingResult>} A promise that resolves with the result of the ping operation, containing details
@@ -15,11 +20,11 @@ export interface ITodoAdapter {
   Ping(): Promise<PingResult>;
 
   /**
-   * Retrieves a list of contexts asynchronously.
+   * Retrieves a list of active contexts asynchronously.
    *
    * @return {Promise<Context[]>} A promise that resolves to an array of context objects.
    */
-  GetContexts(): Promise<ContextItem[]>;
+  GetActiveContexts(): Promise<ContextItem[]>;
 
   /**
    * Retrieves a list of todo items for a given context.

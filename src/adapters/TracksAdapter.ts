@@ -10,6 +10,10 @@ export class TracksAdapter implements ITodoAdapter {
     ignoreDeclaration: true
   });
 
+  GetDisplayInfo(): string {
+    return `Tracks (${this.baseUrl})`;
+  }
+
   /**
    * Creates a new instance.
    * @param baseUrl The base url to reach Tracks.
