@@ -19,13 +19,13 @@ export interface ITodoAdapter {
    *
    * @return {Promise<Context[]>} A promise that resolves to an array of context objects.
    */
-  GetContexts(): Promise<Context[]>;
+  GetActiveContexts(): Promise<Context[]>;
 
   /**
-   * Retrieves a list of todo items.
+   * Retrieves a list of todo items for a given context.
    *
    * @return {Promise<TodoItem[]>} A promise that resolves to an array of Todo objects.
    */
-  GetTodos(): Promise<TodoItem[]>
+  GetActiveTodos(contextId: number): Promise<TodoItem[]>
 
 }

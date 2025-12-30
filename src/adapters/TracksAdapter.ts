@@ -21,45 +21,9 @@ export class TracksAdapter implements ITodoAdapter {
               private doRequest: (request: RequestUrlParam | string) => RequestUrlResponsePromise) {
   }
 
-  // public async Ping(): Promise<PingResult> {
-  //   // const url = `${this.baseUrl}/todos/1.xml`;
-  //   const url = `${this.baseUrl}/contexts.xml`;
-  //
-  //   const request = new Request(url, {
-  //     mode: 'no-cors',
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Basic ${this.basicToken}`
-  //     }
-  //   });
-  //
-  //   try {
-  //     await fetch(request);
-  //     return new PingResult(true, true);
-  //   } catch (ex) {
-  //     // 401 = auth failed
-  //     if (ex.status === 401) {
-  //       return new PingResult(true, false);
-  //     }
-  //
-  //     // 403 or 404 = auth ok but item not existing
-  //     if (ex.status === 403 || ex.status === 404) {
-  //       return new PingResult(true, false);
-  //     }
-  //
-  //     // 5xx = server error
-  //     if (ex.status >= 500 && ex.status <= 599) {
-  //       return new PingResult(false, false, "server returned http-500");
-  //     }
-  //
-  //     return new PingResult(false, false);
-  //   }
-  // }
-
   public async Ping(): Promise<PingResult> {
     try {
       let response = await this.doRequest({
-        // url: `${this.baseUrl}/todos/1.xml`,
         url: `${this.baseUrl}/contexts.xml`,
         method: 'GET',
         headers: {
@@ -89,11 +53,11 @@ export class TracksAdapter implements ITodoAdapter {
     }
   }
 
-  public async GetContexts(): Promise<ContextItem[]> {
+  public async GetActiveContexts(): Promise<ContextItem[]> {
     let contextAsJson;
     try {
       let response = await this.doRequest({
-        url: `${this.baseUrl}/contexts.xml`,
+        url: `${this.baseUrl}/contexts.xml?limit_to_active_todos=1`,
         method: 'GET',
         headers: {
           'Authorization': `Basic ${this.basicToken}`
@@ -104,26 +68,22 @@ export class TracksAdapter implements ITodoAdapter {
       contextAsJson = this.xmlParser.parse(response.text);
     } catch (e) {
       // todo: handle error
-      console.error(e);
+      console.error("error getting contexts - " + e);
       return [];
     }
 
-    const items: ContextItem[] = [];
-
-    for (const item of contextAsJson.contexts.context) {
-      const ctx = new ContextItem(item.id, item.name);
-      items.push(ctx);
-    }
-
-    return items;
+    return contextAsJson.contexts.context
+      .filter((x: any) => x.state === "active")
+      .map((x: any) => new ContextItem(x.id, x.name))
+      .sort((a: any, b: any) => a.name.localeCompare(b.name));
   }
 
 
-  public async GetTodos(): Promise<TodoItem[]> {
+  public async GetActiveTodos(contextId: number): Promise<TodoItem[]> {
     let todosAsJson;
     try {
       let response = await this.doRequest({
-        url: `${this.baseUrl}/todos.xml`,
+        url: `${this.baseUrl}/contexts/${contextId}/todos.xml?limit_to_active_todos=1`,
         method: 'GET',
         headers: {
           'Authorization': `Basic ${this.basicToken}`
@@ -134,18 +94,16 @@ export class TracksAdapter implements ITodoAdapter {
       todosAsJson = this.xmlParser.parse(response.text);
     } catch (e) {
       // todo: handle error
-      console.error(e);
+      console.error("error getting todos" + e);
       return [];
     }
 
-    const items: TodoItem[] = [];
-
-    for (const item of todosAsJson.todos.todo) {
-      const todo = new TodoItem(item.id, item.description);
-      items.push(todo);
+    if (Array.isArray(todosAsJson?.todos?.todo) == false){
+      return [];
     }
 
-    return items;
+    return todosAsJson.todos.todo
+      .map((x: any) => new TodoItem(x.id, x.description));
   }
 
 }

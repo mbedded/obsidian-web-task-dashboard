@@ -2,7 +2,7 @@ import { test, expect, describe } from "@jest/globals";
 import { TracksAdapter } from "./TracksAdapter";
 import type { RequestUrlParam, RequestUrlResponse, RequestUrlResponsePromise } from "obsidian";
 
-const TOKEN_LOCALHOST = "bWJlZGRlZDo0MWRlOTZlYzkwYzZmMjhiY2Q1NWMyZjNhMDcwOTg1NjYxYzQ4ZjBm";
+const TOKEN_LOCALHOST = btoa("mbedded:79907a25379561f41dbbfb87f388e3519ce9daf8"); // "bWJlZGRlZDo0MWRlOTZlYzkwYzZmMjhiY2Q1NWMyZjNhMDcwOTg1NjYxYzQ4ZjBm";
 const EMPTY_TOKEN = "";
 
 function emptyRequest(request: RequestUrlParam | string): RequestUrlResponsePromise {
@@ -47,7 +47,7 @@ async function realFetchRequest(request: RequestUrlParam | string): RequestUrlRe
 }
 
 function getInstance(token: string, doRequest: (request: RequestUrlParam | string) => RequestUrlResponsePromise) {
-  return new TracksAdapter("http://localhost:8000", token, doRequest);
+  return new TracksAdapter("http://localhost:9000", token, doRequest);
 }
 
 describe("With empty token", () => {
@@ -88,17 +88,17 @@ describe("With valid token", () => {
   test('Get contexts should return 2 items', async () => {
     const sut = getInstance(TOKEN_LOCALHOST, realFetchRequest);
 
-    const result = await sut.GetContexts();
+    const result = await sut.GetActiveContexts();
 
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(3);
   });
 
   test('Get todos should return 9 items', async () => {
     const sut = getInstance(TOKEN_LOCALHOST, realFetchRequest);
 
-    const result = await sut.GetTodos();
+    const result = await sut.GetActiveTodos(1);
 
-    expect(result).toHaveLength(9);
+    expect(result).toHaveLength(2);
   });
 })
 

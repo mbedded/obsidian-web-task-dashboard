@@ -27,13 +27,8 @@
     loading = true;
     hasError = false;
 
-    debugger
-
     // Check if service is reachable
     var pingResult = await adapter.Ping();
-
-    console.log("result ping");
-    console.log(pingResult);
 
     if (pingResult.isReachable == false) {
       errorHeader = t("messages.service-unreachable-header");
@@ -51,7 +46,7 @@
     }
 
     // Initialize view
-    contexts = await adapter.GetContexts();
+    contexts = await adapter.GetActiveContexts();
 
     loading = false;
   }
