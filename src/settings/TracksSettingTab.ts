@@ -22,9 +22,13 @@ export class TracksSettingTab extends PluginSettingTab {
       // .setName('Tracks URL')
       // .setDesc('Base URL of your instance of Tracks.')
       .addText(text => text
-        .setPlaceholder('http://localhost:3000/')
+        .setPlaceholder('http://localhost:3000')
         .setValue(this.plugin.settings.tracksUrl)
         .onChange(async (value) => {
+          if (value.endsWith('/')) {
+            value = value.slice(0, -1);
+          }
+
           this.plugin.settings.tracksUrl = value;
           await this.plugin.saveSettings();
         }));
