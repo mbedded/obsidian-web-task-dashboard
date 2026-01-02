@@ -26,12 +26,12 @@
 
   async function initialize() {
     isLoading = true;
-    todos = await adapter.GetActiveTodos(context.id);
+    todos = await adapter.getActiveTodos(context.id);
     isLoading = false;
   }
 
   async function markTodoAsDone(todo: TodoItem): Promise<void> {
-    let result = await adapter.ToggleTodoState(todo.id);
+    let result = await adapter.toggleTodoState(todo.id);
 
     if (result) {
       todos = todos.filter(x => x.id !== todo.id);
@@ -39,7 +39,7 @@
   }
 
   async function deleteTodo(todo: TodoItem): Promise<void> {
-    let result = await adapter.DeleteTodo(todo.id);
+    let result = await adapter.deleteTodo(todo.id);
 
     if (result) {
       todos = todos.filter(x => x.id !== todo.id);
@@ -57,7 +57,7 @@
 
     isSaving = true;
     try {
-      let newTodo = await adapter.CreateTodo(context.id, newTodoText);
+      let newTodo = await adapter.createTodo(context.id, newTodoText);
 
       if (newTodo) {
         todos = [...todos, newTodo];

@@ -1,7 +1,7 @@
 import { Plugin, requestUrl, WorkspaceLeaf } from 'obsidian';
 import { DEFAULT_SETTINGS, type TracksPluginSettings } from "./settings/Settings";
 import { TracksSettingTab } from "./settings/TracksSettingTab";
-import { MainViewModel, VIEW_TYPE_EXAMPLE } from "./views/MainViewModel";
+import { MainViewModel, VIEW_TYPE_MAIN } from "./views/MainViewModel";
 
 import { setupLocalization } from "./main.localization";
 import { TracksAdapter } from "./adapters/TracksAdapter";
@@ -12,7 +12,7 @@ export default class TracksPlugin extends Plugin {
 
   async onload() {
     this.registerView(
-      VIEW_TYPE_EXAMPLE,
+      VIEW_TYPE_MAIN,
       (leaf) => {
         const adapter = new TracksAdapter(this.settings.tracksUrl, this.settings.getBasicToken(), requestUrl);
         return new MainViewModel(leaf, adapter);
@@ -36,6 +36,14 @@ export default class TracksPlugin extends Plugin {
     // 		new SampleModal(this.app).open();
     // 	}
     // });
+    this.addCommand({
+      // todo: change name/localize
+      id: 'open-plugin-tab',
+      name: 'Open todo frontend',
+      callback: () => {
+        this.activateView();
+      }
+    });
 
     // This adds a settings tab so the user can configure various aspects of the plugin
     this.addSettingTab(new TracksSettingTab(this.app, this));
@@ -46,7 +54,6 @@ export default class TracksPlugin extends Plugin {
   }
 
   onunload() {
-
   }
 
   async loadSettings() {
@@ -61,7 +68,7 @@ export default class TracksPlugin extends Plugin {
     const {workspace} = this.app;
 
     let leaf: WorkspaceLeaf | null = null;
-    const leaves = workspace.getLeavesOfType(VIEW_TYPE_EXAMPLE);
+    const leaves = workspace.getLeavesOfType(VIEW_TYPE_MAIN);
 
     if (leaves.length > 0) {
       // A leaf (tab) with our views exists already. We use this.
@@ -69,14 +76,10 @@ export default class TracksPlugin extends Plugin {
     } else {
       // Our views could not be found in the workspace, create a new tab.
       leaf = workspace.getLeaf("tab");
-      await leaf.setViewState({type: VIEW_TYPE_EXAMPLE, active: true});
+      await leaf.setViewState({type: VIEW_TYPE_MAIN, active: true});
     }
 
     // "Reveal" the leaf in case it is in a collapsed sidebar
     await workspace.revealLeaf(leaf!);
   }
-
-
 }
-
-

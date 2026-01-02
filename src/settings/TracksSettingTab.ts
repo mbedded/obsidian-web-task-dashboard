@@ -13,14 +13,11 @@ export class TracksSettingTab extends PluginSettingTab {
   display(): void {
     const {containerEl} = this;
 
-
     containerEl.empty();
 
     new Setting(containerEl)
       .setName(t("settings.tracks-url-header"))
       .setDesc(t("settings.tracks-url-description"))
-      // .setName('Tracks URL')
-      // .setDesc('Base URL of your instance of Tracks.')
       .addText(text => text
         .setPlaceholder('http://localhost:3000')
         .setValue(this.plugin.settings.tracksUrl)
@@ -43,7 +40,7 @@ export class TracksSettingTab extends PluginSettingTab {
           this.plugin.settings.tracksUsername = value;
           await this.plugin.saveSettings();
         }));
-    
+
     new Setting(containerEl)
       .setName(t("settings.tracks-token-header"))
       .setDesc(t("settings.tracks-token-description"))

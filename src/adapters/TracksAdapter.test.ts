@@ -60,7 +60,7 @@ describe("With empty token", () => {
   test("Ping should return unauthenticated", async () => {
     const sut = getInstance(EMPTY_TOKEN, realFetchRequest);
 
-    const result = await sut.Ping();
+    const result = await sut.ping();
 
     expect(result.isReachable).toBeTruthy();
     expect(result.isAuthenticated).toBeFalsy();
@@ -78,7 +78,7 @@ describe("With valid token", () => {
   test("Ping should return authenticated", async () => {
     const sut = getInstance(TOKEN_LOCALHOST, realFetchRequest);
 
-    const result = await sut.Ping();
+    const result = await sut.ping();
 
     expect(result.isReachable).toBeTruthy();
     expect(result.isAuthenticated).toBeTruthy();
@@ -88,7 +88,7 @@ describe("With valid token", () => {
   test('Get contexts should return 2 items', async () => {
     const sut = getInstance(TOKEN_LOCALHOST, realFetchRequest);
 
-    const result = await sut.GetActiveContexts();
+    const result = await sut.getActiveContexts();
 
     expect(result).toHaveLength(3);
   });
@@ -96,7 +96,7 @@ describe("With valid token", () => {
   test('Get todos should return 9 items', async () => {
     const sut = getInstance(TOKEN_LOCALHOST, realFetchRequest);
 
-    const result = await sut.GetActiveTodos(1);
+    const result = await sut.getActiveTodos(1);
 
     expect(result).toHaveLength(2);
   });

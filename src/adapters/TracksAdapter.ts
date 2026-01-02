@@ -4,6 +4,9 @@ import type { ITodoAdapter } from "./ITodoAdapter";
 import { t } from "localizify";
 import type { RequestUrlParam, RequestUrlResponsePromise } from "obsidian";
 
+/**
+ * This adapter implements the ITodoAdapter interface for Tracks.
+ */
 export class TracksAdapter implements ITodoAdapter {
 
   private readonly xmlParser = new XMLParser({
@@ -21,11 +24,11 @@ export class TracksAdapter implements ITodoAdapter {
               private doRequest: (request: RequestUrlParam | string) => RequestUrlResponsePromise) {
   }
 
-  public GetDisplayInfo(): string {
+  public getDisplayInfo(): string {
     return `Tracks (${this.baseUrl})`;
   }
 
-  public async Ping(): Promise<PingResult> {
+  public async ping(): Promise<PingResult> {
     try {
       let response = await this.doRequest({
         url: `${this.baseUrl}/contexts.xml`,
@@ -57,7 +60,7 @@ export class TracksAdapter implements ITodoAdapter {
     }
   }
 
-  public async GetActiveContexts(): Promise<ContextItem[]> {
+  public async getActiveContexts(): Promise<ContextItem[]> {
     let contextAsJson;
     try {
       let response = await this.doRequest({
@@ -68,7 +71,6 @@ export class TracksAdapter implements ITodoAdapter {
         }
       });
 
-      // todo: filter for active contexts
       contextAsJson = this.xmlParser.parse(response.text);
     } catch (e) {
       // todo: handle error
@@ -83,7 +85,7 @@ export class TracksAdapter implements ITodoAdapter {
   }
 
 
-  public async GetActiveTodos(contextId: number): Promise<TodoItem[]> {
+  public async getActiveTodos(contextId: number): Promise<TodoItem[]> {
     let todosAsJson;
     try {
       let response = await this.doRequest({
@@ -94,7 +96,6 @@ export class TracksAdapter implements ITodoAdapter {
         }
       });
 
-      // todo: filter for active todos
       todosAsJson = this.xmlParser.parse(response.text);
     } catch (e) {
       // todo: handle error
@@ -115,7 +116,7 @@ export class TracksAdapter implements ITodoAdapter {
     return todos.map((x: any) => new TodoItem(x.id, x.description));
   }
 
-  public async ToggleTodoState(todoId: number): Promise<boolean> {
+  public async toggleTodoState(todoId: number): Promise<boolean> {
     try {
       await this.doRequest({
         // We can use this shortcut to toggle the state between active and completed.
@@ -134,7 +135,7 @@ export class TracksAdapter implements ITodoAdapter {
     return true;
   }
 
-  public async CreateTodo(contextId: number, text: string): Promise<TodoItem> {
+  public async createTodo(contextId: number, text: string): Promise<TodoItem> {
     try {
       const xmlBody = `<todo>
     <description>${text}</description>
@@ -163,7 +164,7 @@ export class TracksAdapter implements ITodoAdapter {
     }
   }
 
-  public async DeleteTodo(todoId: number): Promise<boolean> {
+  public async deleteTodo(todoId: number): Promise<boolean> {
     try {
       await this.doRequest({
         url: `${this.baseUrl}/todos/${todoId}.xml`,

@@ -1,17 +1,17 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
-
-// Import the MainView Svelte component and the `mount` and `unmount` methods.
-import MainView from './MainView.svelte';
 import { mount, unmount } from 'svelte';
+import MainView from './MainView.svelte';
 import type { ITodoAdapter } from "../adapters/ITodoAdapter";
 
-// todo: change variable/value
-export const VIEW_TYPE_EXAMPLE = 'example-views';
+export const VIEW_TYPE_MAIN = 'main-view';
 
+/**
+ * This class represents the main view of the plugin.
+ * It shows the todos and allows interacting with them.
+ */
 export class MainViewModel extends ItemView {
   private readonly todoAdapter: ITodoAdapter;
 
-	// A variable to hold on to the MainView instance mounted in this ItemView.
 	mainView: ReturnType<typeof MainView> | undefined;
 
 	constructor(leaf: WorkspaceLeaf, todoAdapter: ITodoAdapter) {
@@ -20,7 +20,7 @@ export class MainViewModel extends ItemView {
   }
 
 	getViewType() {
-		return VIEW_TYPE_EXAMPLE;
+		return VIEW_TYPE_MAIN;
 	}
 
 	getDisplayText() {
@@ -42,7 +42,6 @@ export class MainViewModel extends ItemView {
 
 	async onClose() {
 		if (this.mainView) {
-			// Remove the MainView from the ItemView.
 			await unmount(this.mainView);
 		}
 	}

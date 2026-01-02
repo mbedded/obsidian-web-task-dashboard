@@ -27,7 +27,7 @@
     hasError = false;
 
     // Check if service is reachable
-    var pingResult = await adapter.Ping();
+    var pingResult = await adapter.ping();
 
     if (pingResult.isReachable == false) {
       errorHeader = t("messages.service-unreachable-header");
@@ -45,7 +45,7 @@
     }
 
     // Initialize view
-    contexts = await adapter.GetActiveContexts();
+    contexts = await adapter.getActiveContexts();
 
     loading = false;
   }
@@ -92,7 +92,7 @@
 
   <!-- General information for the user at the bottom of the view -->
   <div class="placeholder">
-    <p>Backend: {adapter.GetDisplayInfo()}</p>
+    <p>Backend: {adapter.getDisplayInfo()}</p>
   </div>
 </div>
 
