@@ -78,7 +78,17 @@ export class TracksAdapter implements ITodoAdapter {
       return [];
     }
 
-    return contextAsJson.contexts.context
+    // Array of a single object is returned as a single object
+    // instead of using an array. So we need 2 checks: Empty and array.
+    let contexts = contextAsJson?.contexts?.context;
+    if (!contexts) {
+      return [];
+    }
+    if (!Array.isArray(contexts)) {
+      contexts = [contexts];
+    }
+
+    return contexts
       .filter((x: any) => x.state === "active")
       .map((x: any) => new ContextItem(x.id, x.name))
       .sort((a: any, b: any) => a.name.localeCompare(b.name));
