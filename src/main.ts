@@ -2,10 +2,8 @@ import { Plugin, requestUrl, WorkspaceLeaf } from "obsidian";
 import { DEFAULT_SETTINGS, type TracksPluginSettings } from "./settings/Settings";
 import { TracksSettingTab } from "./settings/TracksSettingTab";
 import { MainViewModel, VIEW_TYPE_MAIN } from "./views/MainViewModel";
-
-import { setupLocalization } from "./main.localization";
+import { initializeLocalization } from "./main.localization";
 import { TracksAdapter } from "./adapters/TracksAdapter";
-
 
 export default class TracksPlugin extends Plugin {
   settings: TracksPluginSettings;
@@ -19,23 +17,25 @@ export default class TracksPlugin extends Plugin {
       }
     );
 
-    // todo: change icon in sidebar, change tooltip
+    // todo: localize tooltip
     this.addRibbonIcon("square-check-big", "Open Tracks-Plugin", () => {
       this.activateView();
     });
 
     await this.loadSettings();
-    setupLocalization();
+    initializeLocalization();
 
-    // todo: add command to open view instead of ribbon icon only
-    // // This adds a simple command that can be triggered anywhere
-    // this.addCommand({
-    // 	id: 'open-sample-modal-simple',
-    // 	name: 'Open sample modal (simple)',
-    // 	callback: () => {
-    // 		new SampleModal(this.app).open();
-    // 	}
-    // });
+    this.registerCommands();
+
+    // This adds a settings tab so the user can configure various aspects of the plugin
+    this.addSettingTab(new TracksSettingTab(this.app, this));
+
+    // todo: add background checks for new todos in the background? Maybe only if window is open?
+    // When registering intervals, this function will automatically clear the interval when the plugin is disabled.
+    // this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+  }
+
+  private registerCommands() {
     this.addCommand({
       // todo: change name/localize
       id: "open-plugin-tab",
@@ -44,13 +44,6 @@ export default class TracksPlugin extends Plugin {
         this.activateView();
       }
     });
-
-    // This adds a settings tab so the user can configure various aspects of the plugin
-    this.addSettingTab(new TracksSettingTab(this.app, this));
-
-    // todo: add background checks for new todos in the background? Maybe only if window is open?
-    // When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-    // this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
   }
 
   onunload() {

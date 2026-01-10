@@ -1,7 +1,8 @@
 import en from "locales/locale.en.json";
 
 /**
- * This is a simple parser to flatten a given JSON object to a key-value dictionary.
+ * The `LocalizerParser` class is designed to handle the parsing of nested localization files
+ * into flat key-value pairs for easier access to localized strings.
  */
 export class LocalizerParser {
 
@@ -9,6 +10,14 @@ export class LocalizerParser {
     ["en", en],
   ];
 
+  /**
+   * Retrieves a parsed representation of the internal file data.
+   * Iterates through the `files` collection, processing each entry
+   * by converting its contents into a key-value mapping structure.
+   *
+   * @return {Record<string, Record<string, string>>} An object where each key corresponds to a file entry,
+   * and the value is another object representing the parsed key-value structure of that file's contents.
+   */
   public getParsedFiles(): Record<string, Record<string, string>> {
     const parsedData: Record<string, Record<string, string>> = {};
 
@@ -30,6 +39,7 @@ export class LocalizerParser {
         continue;
       }
 
+      // Calling the parseObjectToKeyValues method recursively
       const newEntries = this.parseObjectToKeyValues(value);
       for (const entry in newEntries) {
         const newKey = `${key}.${entry}`;

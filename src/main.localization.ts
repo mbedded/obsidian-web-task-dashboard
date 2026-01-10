@@ -8,7 +8,7 @@ import localizer from "./localizer/localizer";
 
 const FALLBACK_LANGUAGE: string = "en"
 
-export function setupLocalization() {
+export function initializeLocalization() {
   // Setup languages
   const parsedTexts = new LocalizerParser().getParsedFiles();
   localizer.initialize(parsedTexts);
