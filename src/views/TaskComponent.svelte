@@ -51,6 +51,10 @@
   .btn-done {
     background-color: var(--interactive-accent);
     color: var(--text-on-accent);
+
+    &:hover {
+      background-color: var(--interactive-accent-hover);
+    }
   }
 
   .btn-delete {
@@ -61,6 +65,10 @@
     right: 0;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--background-modifier-error-hover);
+    }
   }
 
   .description {
