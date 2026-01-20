@@ -3,17 +3,17 @@
 
   interface Props {
     // The entry to display and interact with.
-    todo: TaskItem;
+    task: TaskItem;
     // Function (callback to parent) to mark an entry as done.
-    markTodoAsDone: (x: TaskItem) => Promise<void>
+    markTaskAsDone: (x: TaskItem) => Promise<void>
     // Function (callback to parent) to delete entry.
-    deleteTodo: (x: TaskItem) => Promise<void>
+    deleteTask: (x: TaskItem) => Promise<void>
   }
 
   let {
-    todo,
-    markTodoAsDone,
-    deleteTodo
+    task,
+    markTaskAsDone,
+    deleteTask
   }: Props = $props();
 
   let doneRunning = $state(false);
@@ -21,13 +21,13 @@
 
   async function OnClickDone() {
     doneRunning = true;
-    await markTodoAsDone(todo);
+    await markTaskAsDone(task);
     doneRunning = false;
   }
 
   async function OnClickDelete() {
     deleteRunning = true;
-    await deleteTodo(todo);
+    await deleteTask(task);
     deleteRunning = false;
   }
 </script>
@@ -105,7 +105,7 @@
       <div class="spinner"></div>
     {/if}
   </button>
-  <span class="description">{todo.description}</span>
+  <span class="description">{task.description}</span>
   <button type="button" class="btn-delete" onclick={OnClickDelete}>
     {#if !deleteRunning}
       Delete

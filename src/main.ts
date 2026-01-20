@@ -1,12 +1,20 @@
-import { Plugin, requestUrl, WorkspaceLeaf } from "obsidian";
+import { type App, Plugin, type PluginManifest, requestUrl, WorkspaceLeaf } from "obsidian";
 import { DEFAULT_SETTINGS, type TracksPluginSettings } from "./settings/Settings";
 import { MainViewModel, VIEW_TYPE_MAIN } from "./views/MainViewModel";
 import { initializeLocalization } from "./main.localization";
 import { TracksAdapter } from "./adapters/TracksAdapter";
 import { SettingTab } from "./settings/SettingTab";
+import { t } from "./localizer/Localizer";
 
 export default class TracksPlugin extends Plugin {
   settings: TracksPluginSettings;
+
+
+  constructor(app: App, manifest: PluginManifest) {
+    super(app, manifest);
+
+    initializeLocalization();
+  }
 
   async onload() {
     this.registerView(
@@ -17,13 +25,11 @@ export default class TracksPlugin extends Plugin {
       }
     );
 
-    // todo: localize tooltip
-    this.addRibbonIcon("square-check-big", "Open Tracks-Plugin", () => {
+    this.addRibbonIcon("square-check-big", t("commands.open-dashboard"), () => {
       this.activateView();
     });
 
     await this.loadSettings();
-    initializeLocalization();
 
     this.registerCommands();
 
@@ -37,9 +43,8 @@ export default class TracksPlugin extends Plugin {
 
   private registerCommands() {
     this.addCommand({
-      // todo: change name/localize
-      id: "open-plugin-tab",
-      name: "Open todo frontend",
+      id: "open-dashboard",
+      name: t("commands.open-dashboard"),
       callback: () => {
         this.activateView();
       }

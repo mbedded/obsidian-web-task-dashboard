@@ -27,35 +27,35 @@ export interface ITaskAdapter {
   getActiveContexts(): Promise<ContextItem[]>;
 
   /**
-   * Retrieves a list of todo items for a given context.
+   * Retrieves a list of tasks for a given context.
    *
-   * @return {Promise<TaskItem[]>} A promise that resolves to an array of Todo objects.
+   * @return {Promise<TaskItem[]>} A promise that resolves to an array of task objects.
    */
   getActiveTasks(contextId: number): Promise<TaskItem[]>
 
   /**
-   * Toggles the state of a specific todo item between active and completed.
+   * Toggles the state of a specific task between active and completed.
    *
-   * @param {number} todoId - The unique identifier of the todo item to toggle..
+   * @param {number} taskId - The unique identifier of the task to toggle..
    * @return {Promise<boolean>} A promise that resolves to a boolean indicating whether the operation was successful.
    */
-  toggleTaskState(todoId: number): Promise<boolean>
+  toggleTaskState(taskId: number): Promise<boolean>
 
   /**
-   * Creates a new todo item in the specified context.
+   * Creates a new task using the specified context.
    *
-   * @param {number} contextId - The ID of the context to add the todo to.
-   * @param {string} text - The text/content of the new todo.
-   * @return {Promise<TaskItem>} A promise that resolves to the newly created TodoItem.
+   * @param {number} contextId - The ID of the context to add the task to.
+   * @param {string} text - The text/content of the new task.
+   * @return {Promise<TaskItem>} A promise that resolves to the newly created TaskItem.
    */
   createTask(contextId: number, text: string): Promise<TaskItem>
 
   /**
-   * Deletes a specific todo item.
+   * Deletes a specific task.
    *
-   * @param {number} todoId - The unique identifier of the todo item to delete.
+   * @param {number} taskId - The unique identifier of the task to delete.
    * @return {Promise<boolean>} A promise that resolves to a boolean indicating whether the operation was successful.
    */
-  deleteTask(todoId: number): Promise<boolean>
+  deleteTask(taskId: number): Promise<boolean>
 
 }

@@ -3,7 +3,8 @@
   import type { ITaskAdapter } from "../adapters/ITaskAdapter";
   import { onMount } from "svelte";
   import SpinnerComponent from "./SpinnerComponent.svelte";
-  import TodoComponent from "./TaskComponent.svelte";
+  import TaskComponent from "./TaskComponent.svelte";
+  import { t } from "../localizer/Localizer";
 
   interface Props {
     adapter: ITaskAdapter;
@@ -17,8 +18,8 @@
 
   let isLoading = $state(false);
   let isSaving = $state(false);
-  let todos: TaskItem[] = $state([]);
-  let newTodoText = $state("");
+  let tasks: TaskItem[] = $state([]);
+  let newTaskText = $state("");
 
   onMount(async () => {
     await initialize()
@@ -26,42 +27,42 @@
 
   async function initialize() {
     isLoading = true;
-    todos = await adapter.getActiveTasks(context.id);
+    tasks = await adapter.getActiveTasks(context.id);
     isLoading = false;
   }
 
-  async function markTodoAsDone(todo: TaskItem): Promise<void> {
-    let result = await adapter.toggleTaskState(todo.id);
+  async function markTaskAsDone(task: TaskItem): Promise<void> {
+    let result = await adapter.toggleTaskState(task.id);
 
     if (result) {
-      todos = todos.filter(x => x.id !== todo.id);
+      tasks = tasks.filter(x => x.id !== task.id);
     }
   }
 
-  async function deleteTodo(todo: TaskItem): Promise<void> {
-    let result = await adapter.deleteTask(todo.id);
+  async function deleteTask(task: TaskItem): Promise<void> {
+    let result = await adapter.deleteTask(task.id);
 
     if (result) {
-      todos = todos.filter(x => x.id !== todo.id);
+      tasks = tasks.filter(x => x.id !== task.id);
     }
   }
 
-  async function onTxtNewTodoKeyDown(e: KeyboardEvent) {
+  async function onTxtNewTaskKeyDown(e: KeyboardEvent) {
     if (e.key !== "Enter") {
       return;
     }
 
-    if (!newTodoText.trim()) {
+    if (!newTaskText.trim()) {
       return;
     }
 
     isSaving = true;
     try {
-      let newTodo = await adapter.createTask(context.id, newTodoText);
+      let newTask = await adapter.createTask(context.id, newTaskText);
 
-      if (newTodo) {
-        todos = [...todos, newTodo];
-        newTodoText = "";
+      if (newTask) {
+        tasks = [...tasks, newTask];
+        newTaskText = "";
       }
     } finally {
       isSaving = false;
@@ -88,43 +89,41 @@
     }
   }
 
-  .no-todos-existing {
+  .no-tasks-existing {
     color: var(--text-muted);
   }
 
-  .txt-new-todo {
+  .txt-new-task {
     width: 100%;
   }
 </style>
 
-<!-- todo: localize view -->
 <div class="container">
-  <p class="header">{context.name} <span>({todos.length})</span></p>
+  <p class="header">{context.name} <span>({tasks.length})</span></p>
 
   {#if isLoading}
-    <SpinnerComponent text="Loading todos…"/>
+    <SpinnerComponent text={t("view.loading-tasks")} />
   {/if}
 
-  {#if !!todos && todos.length }
-    {#each todos as todo (todo.id)}
-      <TodoComponent todo={todo}
-                     markTodoAsDone={markTodoAsDone}
-                     deleteTodo={deleteTodo}/>
+  {#if !!tasks && tasks.length }
+    {#each tasks as task (task.id)}
+      <TaskComponent task={task}
+                     markTaskAsDone={markTaskAsDone}
+                     deleteTask={deleteTask} />
     {/each}
 
   {:else}
-    <p class="no-todos-existing">No todos existing</p>
+    <p class="no-tasks-existing">{t("view.no-tasks-existing")}</p>
   {/if}
 
-  <input class="txt-new-todo"
+  <input class="txt-new-task"
          type="text"
-         bind:value={newTodoText}
-         onkeydown={onTxtNewTodoKeyDown}
-         placeholder="Add new todo. Confirm with RETURN…"
-         readonly={isSaving}/>
+         bind:value={newTaskText}
+         onkeydown={onTxtNewTaskKeyDown}
+         placeholder={t("view.txt-add-new-task")}
+         readonly={isSaving} />
 
   {#if isSaving}
-    <SpinnerComponent text="Saving..."/>
+    <SpinnerComponent text={t("view.saving")} />
   {/if}
-
 </div>

@@ -1,7 +1,7 @@
 {
   "settings": {
-    "header-tracks-endpoint" : "Tracks endpoint",
-    "tracks-password-description": "Your passwordto access Tracks. The token is readonly and has no rights to to create todos. Please note that the password is stored in plain text for now!",
+    "header-tracks-endpoint": "Tracks endpoint",
+    "tracks-password-description": "Your password to access Tracks. The token is readonly and has no rights to to create todos. Please note that the password is stored in plain text for now!",
     "tracks-password-header": "Password",
     "tracks-url-description": "Base URL of your instance of Tracks.",
     "tracks-url-header": "Tracks URL",
@@ -14,5 +14,16 @@
     "service-authentication-failed-header": "Authentication failed",
     "service-unreachable-description": "The service cannot be reached. Please check your settings and verify the URL is correct.",
     "service-unreachable-header": "Service unreachable"
+  },
+  "commands": {
+    "open-dashboard": "Open task dashboard"
+  },
+  "view": {
+    "title": "Task Dashboard",
+    "loading-contexts": "Loading contexts...",
+    "loading-tasks": "Loading tasks...",
+    "no-tasks-existing": "No tasks existing",
+    "txt-add-new-task": "Add a task here. Confirm by pressing RETURN...",
+    "saving": "Saving..."
   }
 }

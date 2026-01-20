@@ -54,7 +54,7 @@ describe("With valid token", () => {
     expect(result).toHaveLength(3);
   });
 
-  test("Get todos should return 9 items", async () => {
+  test("Get tasks should return 9 items", async () => {
     const sut = getInstance(TOKEN_LOCALHOST, realFetchRequest);
 
     const result = await sut.getActiveTasks(1);

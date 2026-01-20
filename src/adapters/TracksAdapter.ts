@@ -5,7 +5,7 @@ import { t } from "../localizer/Localizer";
 import type { RequestUrlParam, RequestUrlResponsePromise } from "obsidian";
 
 /**
- * This adapter implements the ITodoAdapter interface for Tracks.
+ * This adapter implements the ITaskAdapter interface for Tracks.
  */
 export class TracksAdapter implements ITaskAdapter {
 
@@ -30,7 +30,7 @@ export class TracksAdapter implements ITaskAdapter {
 
   public async ping(): Promise<PingResult> {
     try {
-      const response = await this.doRequest({
+      await this.doRequest({
         url: `${this.baseUrl}/contexts.xml`,
         method: "GET",
         headers: {
@@ -89,14 +89,14 @@ export class TracksAdapter implements ITaskAdapter {
     }
 
     return contexts
-      .filter((x: any) => x.state === "active")
-      .map((x: any) => new ContextItem(x.id, x.name))
-      .sort((a: any, b: any) => a.name.localeCompare(b.name));
+      .filter((x) => x.state === "active")
+      .map((x) => new ContextItem(x.id, x.name))
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 
 
   public async getActiveTasks(contextId: number): Promise<TaskItem[]> {
-    let todosAsJson;
+    let responseAsXml;
     try {
       const response = await this.doRequest({
         url: `${this.baseUrl}/contexts/${contextId}/todos.xml?limit_to_active_todos=1`,
@@ -106,31 +106,31 @@ export class TracksAdapter implements ITaskAdapter {
         }
       });
 
-      todosAsJson = this.xmlParser.parse(response.text);
+      responseAsXml = this.xmlParser.parse(response.text);
     } catch (e) {
       // todo: handle error
-      console.error("error getting todos" + e);
+      console.error("error getting tasks" + e);
       return [];
     }
 
     // Array of a single object is returned as a single object
     // instead of using an array. So we need 2 checks: Empty and array.
-    let todos = todosAsJson?.todos?.todo;
-    if (!todos) {
+    let tasks = responseAsXml?.todos?.todo;
+    if (!tasks) {
       return [];
     }
-    if (!Array.isArray(todos)) {
-      todos = [todos];
+    if (!Array.isArray(tasks)) {
+      tasks = [tasks];
     }
 
-    return todos.map((x: any) => new TaskItem(x.id, x.description));
+    return tasks.map((x) => new TaskItem(x.id, x.description));
   }
 
-  public async toggleTaskState(todoId: number): Promise<boolean> {
+  public async toggleTaskState(taskId: number): Promise<boolean> {
     try {
       await this.doRequest({
         // We can use this shortcut to toggle the state between active and completed.
-        url: `${this.baseUrl}/todos/${todoId}/toggle_check.xml`,
+        url: `${this.baseUrl}/todos/${taskId}/toggle_check.xml`,
         method: "PUT",
         headers: {
           "Authorization": `Basic ${this.basicToken}`,
@@ -174,10 +174,10 @@ export class TracksAdapter implements ITaskAdapter {
     }
   }
 
-  public async deleteTask(todoId: number): Promise<boolean> {
+  public async deleteTask(taskId: number): Promise<boolean> {
     try {
       await this.doRequest({
-        url: `${this.baseUrl}/todos/${todoId}.xml`,
+        url: `${this.baseUrl}/todos/${taskId}.xml`,
         method: "DELETE",
         headers: {
           "Authorization": `Basic ${this.basicToken}`,
@@ -185,9 +185,9 @@ export class TracksAdapter implements ITaskAdapter {
       });
       return true;
     } catch (e) {
-      console.error("error deleting todo: " + e);
+      console.error("error deleting task: " + e);
       return false;
     }
   }
-  
+
 }

@@ -67,14 +67,13 @@
   }
 </style>
 
-<!-- todo: localize view -->
 <div class="container">
   {#if loading}
-    <SpinnerComponent text="Loading contexts…"/>
+    <SpinnerComponent text={t("view.loading-contexts")} />
   {/if}
 
   {#if hasError}
-    <ErrorComponent header={errorHeader} message={errorMessage}/>
+    <ErrorComponent header={errorHeader} message={errorMessage} />
     <!-- todo: add reload button so user can press button instead of close/open tab -->
   {/if}
 
@@ -83,7 +82,7 @@
     <!-- todo: add reload button when user adds context via web UI-->
 
     {#each contexts as context}
-      <ContextComponent adapter={adapter} context={context}/>
+      <ContextComponent adapter={adapter} context={context} />
     {/each}
   {/if}
 

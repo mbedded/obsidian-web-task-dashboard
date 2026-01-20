@@ -2,21 +2,22 @@ import { ItemView, WorkspaceLeaf } from "obsidian";
 import { mount, unmount } from "svelte";
 import MainView from "./MainView.svelte";
 import type { ITaskAdapter } from "../adapters/ITaskAdapter";
+import { t } from "../localizer/Localizer";
 
 export const VIEW_TYPE_MAIN = "main-view";
 
 /**
  * This class represents the main view of the plugin.
- * It shows the todos and allows interacting with them.
+ * It shows the tasks and allows interacting with them.
  */
 export class MainViewModel extends ItemView {
-  private readonly todoAdapter: ITaskAdapter;
+  private readonly taskAdapter: ITaskAdapter;
 
   mainView: ReturnType<typeof MainView> | undefined;
 
-  constructor(leaf: WorkspaceLeaf, todoAdapter: ITaskAdapter) {
+  constructor(leaf: WorkspaceLeaf, taskAdapter: ITaskAdapter) {
     super(leaf);
-    this.todoAdapter = todoAdapter;
+    this.taskAdapter = taskAdapter;
   }
 
   getViewType() {
@@ -24,8 +25,7 @@ export class MainViewModel extends ItemView {
   }
 
   getDisplayText() {
-    // todo: verify name. Localization? Read name from manifest?
-    return "Tracks Plugin";
+    return t("view.title");
   }
 
   async onOpen() {
@@ -33,7 +33,7 @@ export class MainViewModel extends ItemView {
     this.mainView = mount(MainView, {
       target: this.contentEl,
       props: {
-        adapter: this.todoAdapter,
+        adapter: this.taskAdapter,
       }
     });
   }
