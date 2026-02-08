@@ -13,10 +13,6 @@ If it's missing: Create an issue and describe the fix or feature.
 
 We want to avoid duplicates and keep the issues as clean as possible.
 
-> [!NOTE]
-> Minor issues and trivial fixes like typos or missing language translations
-> can be pushed directly via a PR without creating an issue first.
-
 ## Getting Started
 
 - Fork and clone the repository.
@@ -40,17 +36,23 @@ feat: Add button to delete user
 fix: Handle NULL error when deleting user
 ```
 
-You may specify a scope to highlight which part of the application is affected by the change.
-For example:
-
-```
-fix(ui): Increase contrast of button color
-feat(database): Add new table to store custom user-data
-```
-
-As of writing this (2026-02-08) there are no scopes defined.
+To make the commit history more readable, try to keep the commit messages concise and focused on the changes made.
+If a commit introduces multiple changes, consider breaking it down into smaller commits that each address a specific aspect of the change.
 
 ## Issue and Pull Request Guidelines
 
+Before opening a new issue:
 
+- Search first: check existing issues/PRs (open and closed) to avoid duplicates.
+- One topic per issue: if you have multiple unrelated problems, open separate issues.
+- Provide enough context so others can reproduce and fix it.
 
+Before opening a PR:
+
+- Prefer creating/linking an issue first for non-trivial changes.
+- Keep PRs small and focused (one feature/fix per PR).
+- Avoid unrelated refactors, formatting, or drive-by changes unless agreed upon.
+
+> [!NOTE]
+> Minor issues and trivial changes like fixing typos or add translations
+> can be pushed directly via a PR without creating an issue first.
