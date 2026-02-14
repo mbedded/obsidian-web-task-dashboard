@@ -1,0 +1,38 @@
+name: Update Changelog on Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout "master" branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          path: master
+          
+      - name: Checkout "gh-pages" branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+      
+      - name: Copy changelog from master to gh-pages
+        run: |
+          cp ./master/docs/CHANGELOG.md ./gh-pages/Changelog.md
+      
+      - name: Commit and push changes
+        run: |
+          cd gh-pages
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add ./gh-pages/changelog.md
+          git commit -m "Update changelog from master"
+          git push
