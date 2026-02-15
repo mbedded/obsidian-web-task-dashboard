@@ -9,6 +9,15 @@ The dashboard looks like this:
 
 ![Example dashboard with the contexts "Home" and "Work" and their respective tasks.](/docs/img/dashboard.webp)
 
+## Supported services
+
+To use one of these services, you may need to create an account or set up the service independently.
+Authentication data is required for this plugin to interact with the service.
+
+Currently, the following services are supported:
+
+- Tracks (https://github.com/TracksApp/tracks)
+
 ## Installation
 
 ### Installation via Community Plugins

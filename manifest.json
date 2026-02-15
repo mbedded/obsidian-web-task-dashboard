@@ -3,7 +3,7 @@
   "name": "Web Task Dashboard",
   "version": "1.0.0",
   "minAppVersion": "1.11.0",
-  "description": "Bring tasks from different providers into your Obsidian vault for easy access and management.",
+  "description": "Integrates your tasks from web services into Obsidian, allowing you to stay in Obsidian without distraction.",
   "author": "mbedded",
   "authorUrl": "https://mbuege.com",
   "fundingUrl": "https://ko-fi.com/mbedded",
