@@ -31,6 +31,5 @@ jobs:
       - name: Type check
         run: npm run svelte-check
  
-# No tests for now, should be added later
-#      - name: Test
-#        run: npm run -s test --if-present
+      - name: Test
+        run: npm run -s test:ci --if-present
