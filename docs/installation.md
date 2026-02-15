@@ -1,7 +1,7 @@
 ---
 title: Installation
 description: "Installation of Web Rask Dashboard in Obsidian"
-nav_order: 2
+nav_order: 10
 ---
 
 # Installation

@@ -29,7 +29,7 @@ This allows users to manage their tasks within a single application, eliminating
 Users can stay in their familiar environment while accessing and organizing tasks.
 By keeping everything in one place, the plugin enhances productivity and streamlines workflow.
 
-Please note, that the first version supports only [Tracks]({% link docs/Configuration/Tracks.md %}) as a backend.
+Please note, that the first version supports only [Tracks]({% link docs/Configuration/tracks.md %}) as a backend.
 New endpoints may be introduced in the future.
 
 ## Have an issue or feature request?
