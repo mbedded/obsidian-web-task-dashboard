@@ -43,7 +43,7 @@ export class Localizer {
    * @return A boolean indicating whether the specified locale exists (true) or not (false).
    */
   public isLocale(locale: string) {
-    return this.texts.hasOwnProperty(locale);
+    return Object.hasOwn(this.texts, locale);
   }
 
   /**
@@ -82,7 +82,7 @@ export class Localizer {
 
   private interpolate(text: string, data: Record<string, string>): string {
     return text.replace(/{(\w+)}/g, (match, key) => {
-      return data.hasOwnProperty(key) ? data[key] : match;
+      return Object.hasOwn(data, key) ? data[key] : match;
     });
   }
 
