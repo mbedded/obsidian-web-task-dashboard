@@ -47,4 +47,4 @@ Now you can do the following actions:
 ### Information
 
 At the bottom of the dashboard, you will find additional information about the task dashboard.
-For now (v1.0), it displays the backend being used along with the corresponding URL.
+For now (`v1.0`), it displays the backend being used along with the corresponding URL.
