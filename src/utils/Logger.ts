@@ -35,7 +35,7 @@ export class Logger implements ILogger {
   public warn: (message: string, ...optionalParams: unknown[]) => void = Logger.defaultWarn;
   public error: (message: string, ...optionalParams: unknown[]) => void = Logger.defaultError;
 
-  private messenger: IMessenger;
+  private messenger?: IMessenger;
 
   public initialize(messenger: IMessenger): void{
     if (this.messenger != null){

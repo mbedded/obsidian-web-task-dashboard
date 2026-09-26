@@ -19,9 +19,9 @@ export default class TracksPlugin extends Plugin {
 
   private readonly messenger: IMessenger;
   private readonly logger: Logger;
-  private adapter: ITaskAdapter;
+  private adapter: ITaskAdapter | undefined;
 
-  public settings: ITracksPluginSettings;
+  public declare settings: ITracksPluginSettings;
 
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
