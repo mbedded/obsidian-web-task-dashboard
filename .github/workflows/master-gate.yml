@@ -28,8 +28,11 @@ jobs:
       - name: Build
         run: npm run build
       
-      - name: Type check
+      - name: Check svelte
         run: npm run svelte-check
- 
+      
       - name: Test
         run: npm run -s test:ci --if-present
+      
+      - name: Check localization
+        run: npm run -s check-localization --if-present
