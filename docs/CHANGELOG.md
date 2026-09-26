@@ -7,7 +7,7 @@ It serves as a reference for tracking version history and release details.
 
 ## Version 1.x
 
-### Upcoming
+### [1.1.0](https://github.com/mbedded/obsidian-web-task-dashboard/releases/tag/1.1.0)
 
 #### Features
 
@@ -19,6 +19,8 @@ It serves as a reference for tracking version history and release details.
 #### Other
 
 - Improve error messages when service is not available or when no contexts exist.
+  Error messages will be logged to console and shown via `Notice`.
+- Update dependencies via Dependabot.
 
 ### [1.0.1](https://github.com/mbedded/obsidian-web-task-dashboard/releases/tag/1.0.1)
 
