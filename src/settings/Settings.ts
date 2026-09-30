@@ -1,9 +1,13 @@
 export interface ITracksPluginSettings {
+  // A version to enable migrations if breaking changes are made in the future
+  version: number;
   // Endpoint settings
-  tracksUrl: string;
-  tracksUsername: string;
-  tracksToken: string;
-
+  endpoint: {
+    type: EndpointType;
+    url: string;
+    username: string;
+    token: string;
+  },
   // Development/Debug settings
   debug: {
     enableConsoleLogging: boolean;
@@ -13,20 +17,26 @@ export interface ITracksPluginSettings {
   getBasicToken(): string;
 }
 
-export const DEFAULT_SETTINGS: ITracksPluginSettings = {
-  // Endpoint settings
-  tracksUrl: "",
-  tracksUsername: "",
-  tracksToken: "",
+export enum EndpointType {
+  Tracks = "tracks"
+}
 
-  // Development/Debug settings
+export const DEFAULT_SETTINGS: ITracksPluginSettings = {
+  // Properties
+  version: 1,
+  endpoint: {
+    type: EndpointType.Tracks,
+    url: "",
+    username: "",
+    token: "",
+  },
   debug: {
     enableConsoleLogging: false
   },
 
   // Methods
   getBasicToken(): string {
-    const basic = `${this.tracksUsername}:${this.tracksToken}`;
+    const basic = `${this.endpoint.username}:${this.endpoint.token}`;
     return btoa(basic)
   }
 }

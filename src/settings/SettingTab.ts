@@ -27,31 +27,31 @@ export class SettingTab extends PluginSettingTab {
         .setDesc(t("settings.tracks-url-description"))
         .addText(text => text
           .setPlaceholder(t("settings.tracks-url-placeholder"))
-          .setValue(plugin.settings.tracksUrl)
+          .setValue(plugin.settings.endpoint.url)
           .onChange(async (value) => {
             if (value.endsWith("/")) {
               value = value.slice(0, -1);
             }
 
-            plugin.settings.tracksUrl = value;
+            plugin.settings.endpoint.url = value;
             await plugin.saveSettings();
           })))
       .addSetting(setting => setting
         .setName(t("settings.tracks-username-header"))
         .setDesc(t("settings.tracks-username-description"))
         .addText(text => text
-          .setValue(plugin.settings.tracksUsername)
+          .setValue(plugin.settings.endpoint.username)
           .onChange(async (value) => {
-            plugin.settings.tracksUsername = value;
+            plugin.settings.endpoint.username = value;
             await plugin.saveSettings();
           })))
       .addSetting(setting => setting
         .setName(t("settings.tracks-password-header"))
         .setDesc(t("settings.tracks-password-description"))
         .addText(text => {
-            text.setValue(plugin.settings.tracksToken)
+            text.setValue(plugin.settings.endpoint.token)
             text.onChange(async (value) => {
-              plugin.settings.tracksToken = value;
+              plugin.settings.endpoint.token = value;
               await plugin.saveSettings();
             });
             text.inputEl.type = "password";
