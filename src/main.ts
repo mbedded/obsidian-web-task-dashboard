@@ -1,5 +1,5 @@
 import { type App, Notice, Plugin, type PluginManifest, requestUrl, WorkspaceLeaf } from "obsidian";
-import { DEFAULT_SETTINGS, type ITracksPluginSettings } from "./settings/Settings";
+import { DEFAULT_SETTINGS, EndpointType, type ITracksPluginSettings } from "./settings/Settings";
 import { MainViewModel, VIEW_TYPE_MAIN } from "./views/MainViewModel";
 import { initializeLocalization } from "./main.localization";
 import { TracksAdapter } from "./adapters/TracksAdapter";
@@ -12,6 +12,7 @@ import { Helpers } from "./utils/Helpers";
 import { EditTaskModal } from "./modals/EditTaskModal";
 import { Logger } from "./utils/Logger";
 import type { IMessenger } from "./messenger/IMessenger";
+import { DoNothingAdapter } from "./adapters/DoNothingAdapter";
 
 export default class TracksPlugin extends Plugin {
   private static readonly DEFAULT_NOTICE_TIME: number = 3000;
@@ -121,7 +122,21 @@ export default class TracksPlugin extends Plugin {
   }
 
   private getAdapter(): ITaskAdapter {
-    return this.adapter ??= new TracksAdapter(this.settings.tracksUrl, this.settings.getBasicToken(), requestUrl, this.messenger, this.logger);
+    if (this.adapter == null){
+      let endpoint = this.settings.endpoint;
+      switch (endpoint.type){
+        case EndpointType.Tracks:
+          this.adapter = new TracksAdapter(endpoint.url, this.settings.getBasicToken(), requestUrl, this.messenger, this.logger);
+          break;
+
+        default:
+          this.messenger.send("show_notice_error", t("notice.error-unknown-endpoint-type"));
+          this.logger.error(`Unknown endpoint type: ${endpoint.type}`);
+          return new DoNothingAdapter();
+      }
+    }
+
+    return this.adapter;
   }
 
   async activateView() {
