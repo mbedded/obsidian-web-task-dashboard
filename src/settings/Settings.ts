@@ -6,7 +6,7 @@ export interface ITracksPluginSettings {
     type: EndpointType;
     url: string;
     username: string;
-    token: string;
+    secret: string;
   },
   // Development/Debug settings
   debug: {
@@ -28,7 +28,7 @@ export const DEFAULT_SETTINGS: ITracksPluginSettings = {
     type: EndpointType.Tracks,
     url: "",
     username: "",
-    token: "",
+    secret: "",
   },
   debug: {
     enableConsoleLogging: false
@@ -36,7 +36,7 @@ export const DEFAULT_SETTINGS: ITracksPluginSettings = {
 
   // Methods
   getBasicToken(): string {
-    const basic = `${this.endpoint.username}:${this.endpoint.token}`;
+    const basic = `${this.endpoint.username}:${this.endpoint.secret}`;
     return btoa(basic)
   }
 }
