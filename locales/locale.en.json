@@ -1,16 +1,19 @@
 {
   "settings": {
-    "header-tracks-endpoint": "Tracks endpoint",
-    "header-debugging": "Development & Debugging",
-    "tracks-password-description": "Your password to access Tracks. The token is readonly and has no rights to to create todos. Please note that the password is stored in plain text for now!",
-    "tracks-password-header": "Password",
-    "tracks-url-description": "Base URL of your instance of Tracks.",
-    "tracks-url-header": "Tracks URL",
-    "tracks-url-placeholder": "http://localhost:3000",
-    "tracks-username-description": "Your username to access Tracks.",
-    "tracks-username-header": "Username",
+    "debug-console-log-description": "Write detailed diagnostic messages to the developer console to help troubleshoot issues. Leave this disabled unless you’re debugging or reporting a problem.",
     "debug-console-log-header": "Enable console logging",
-    "debug-console-log-description": "Write detailed diagnostic messages to the developer console to help troubleshoot issues. Leave this disabled unless you’re debugging or reporting a problem."
+    "endpoint-name-tracks": "Tracks",
+    "endpoint-secret-description": "Your secret (password/key) to access the selected service.",
+    "endpoint-secret-header": "Secret",
+    "endpoint-service-selector-description": "Select which provider or service should be used.",
+    "endpoint-service-selector-header": "Service",
+    "endpoint-url-description": "Base URL to access the selected service.",
+    "endpoint-url-header": "URL",
+    "endpoint-url-placeholder": "http://localhost:3000",
+    "endpoint-username-description": "Your username to access the selected service.",
+    "endpoint-username-header": "Username",
+    "header-debugging": "Development & Debugging",
+    "header-endpoint": "Endpoint"
   },
   "messages": {
     "no-contexts-existing-description": "Please create a context in your service so this plugin can work.",
@@ -22,9 +25,9 @@
     "service-unreachable-header": "Service unreachable"
   },
   "commands": {
+    "create-task": "Create new task",
     "open-dashboard": "Open task dashboard",
-    "reload-tasks": "Reload tasks",
-    "create-task": "Create new task"
+    "reload-tasks": "Reload tasks"
   },
   "view": {
     "aria-lbl-expand-description": "Expand description",
