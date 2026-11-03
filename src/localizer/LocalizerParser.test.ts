@@ -10,5 +10,5 @@ test("Ensure files are parsed correctly", () => {
   expect(result).toBeTruthy();
   expect(resultEn).toBeTruthy();
   // Check keys, normal and nested
-  expect(resultEn["settings.tracks-username-header"]).toBe("Username");
+  expect(resultEn["settings.endpoint-username-header"]).toBe("Username");
 });

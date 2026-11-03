@@ -1,3 +1,7 @@
+import type { App } from "obsidian";
+import type { IMessenger } from "../messenger/IMessenger";
+import { t } from "../localizer/Localizer";
+
 export interface ITracksPluginSettings {
   // A version to enable migrations if breaking changes are made in the future
   version: number;
@@ -6,7 +10,7 @@ export interface ITracksPluginSettings {
     type: EndpointType;
     url: string;
     username: string;
-    token: string;
+    secret: string;
   },
   // Development/Debug settings
   debug: {
@@ -14,7 +18,7 @@ export interface ITracksPluginSettings {
   },
 
   // Methods
-  getBasicToken(): string;
+  getBasicToken(app: App, messenger: IMessenger): string;
 }
 
 export enum EndpointType {
@@ -28,15 +32,23 @@ export const DEFAULT_SETTINGS: ITracksPluginSettings = {
     type: EndpointType.Tracks,
     url: "",
     username: "",
-    token: "",
+    secret: "",
   },
   debug: {
     enableConsoleLogging: false
   },
 
   // Methods
-  getBasicToken(): string {
-    const basic = `${this.endpoint.username}:${this.endpoint.token}`;
+  getBasicToken(app: App, messenger: IMessenger): string {
+    // todo: refactor this method. It doesn't belong here. It's doing too much
+    let value = app.secretStorage.getSecret(this.endpoint.secret);
+
+    if (!value) {
+      messenger.send("show_notice_error", t("notice.error-secret-not-found", {secret: this.endpoint.secret}))
+      return "";
+    }
+
+    const basic = `${this.endpoint.username}:${value}`;
     return btoa(basic)
   }
 }

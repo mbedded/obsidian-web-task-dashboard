@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, SettingGroup } from "obsidian";
+import { App, PluginSettingTab, SecretComponent, SettingGroup, TextComponent } from "obsidian";
 import TracksPlugin from "../main";
 import { t } from "../localizer/Localizer";
 
@@ -15,18 +15,18 @@ export class SettingTab extends PluginSettingTab {
 
     containerEl.empty();
 
-    SettingTab.addEndpointSettings(containerEl, this.plugin);
+    this.addEndpointSettings(containerEl, this.plugin);
     SettingTab.addDevSettings(containerEl, this.plugin);
   }
 
-  private static addEndpointSettings(containerEl: HTMLElement, plugin: TracksPlugin) {
+  private addEndpointSettings(containerEl: HTMLElement, plugin: TracksPlugin) {
     new SettingGroup(containerEl)
-      .setHeading(t("settings.header-tracks-endpoint"))
+      .setHeading(t("settings.header-endpoint"))
       .addSetting(setting => setting
-        .setName(t("settings.tracks-url-header"))
-        .setDesc(t("settings.tracks-url-description"))
+        .setName(t("settings.endpoint-url-header"))
+        .setDesc(t("settings.endpoint-url-description"))
         .addText(text => text
-          .setPlaceholder(t("settings.tracks-url-placeholder"))
+          .setPlaceholder(t("settings.endpoint-url-placeholder"))
           .setValue(plugin.settings.endpoint.url)
           .onChange(async (value) => {
             if (value.endsWith("/")) {
@@ -37,8 +37,8 @@ export class SettingTab extends PluginSettingTab {
             await plugin.saveSettings();
           })))
       .addSetting(setting => setting
-        .setName(t("settings.tracks-username-header"))
-        .setDesc(t("settings.tracks-username-description"))
+        .setName(t("settings.endpoint-username-header"))
+        .setDesc(t("settings.endpoint-username-description"))
         .addText(text => text
           .setValue(plugin.settings.endpoint.username)
           .onChange(async (value) => {
@@ -46,28 +46,27 @@ export class SettingTab extends PluginSettingTab {
             await plugin.saveSettings();
           })))
       .addSetting(setting => setting
-        .setName(t("settings.tracks-password-header"))
-        .setDesc(t("settings.tracks-password-description"))
-        .addText(text => {
-            text.setValue(plugin.settings.endpoint.token)
-            text.onChange(async (value) => {
-              plugin.settings.endpoint.token = value;
+          .setName(t("settings.endpoint-secret-header"))
+          .setDesc(t("settings.endpoint-secret-description"))
+          .addComponent(el => new SecretComponent(this.app, el)
+            .setValue(plugin.settings.endpoint.secret)
+            .onChange(async (value) => {
+              plugin.settings.endpoint.secret = value ?? "";
               await plugin.saveSettings();
-            });
-            text.inputEl.type = "password";
-          }
-        ));
+            })
+          )
+      );
   }
 
   private static addDevSettings(containerEl: HTMLElement, plugin: TracksPlugin) {
     new SettingGroup(containerEl)
       .setHeading(t("settings.header-debugging"))
-      .addSetting(x=>x
+      .addSetting(x => x
         .setName(t("settings.debug-console-log-header"))
         .setDesc(t("settings.debug-console-log-description"))
-        .addToggle(x=> {
+        .addToggle(x => {
           x.setValue(plugin.settings.debug.enableConsoleLogging);
-          x.onChange(async (value) =>{
+          x.onChange(async (value) => {
             plugin.settings.debug.enableConsoleLogging = value;
             await plugin.saveSettings();
           });
