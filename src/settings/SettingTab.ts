@@ -1,13 +1,12 @@
-import { App, PluginSettingTab, SecretComponent, SettingGroup, TextComponent } from "obsidian";
+import { App, PluginSettingTab, SecretComponent, SettingGroup } from "obsidian";
 import TracksPlugin from "../main";
 import { t } from "../localizer/Localizer";
+import { type IMessenger, SettingsType } from "../messenger/IMessenger";
 
 export class SettingTab extends PluginSettingTab {
-  private readonly plugin: TracksPlugin;
 
-  constructor(app: App, plugin: TracksPlugin) {
+  constructor(app: App, private plugin: TracksPlugin, private messenger: IMessenger) {
     super(app, plugin);
-    this.plugin = plugin;
   }
 
   display(): void {
@@ -16,10 +15,19 @@ export class SettingTab extends PluginSettingTab {
     containerEl.empty();
 
     this.addEndpointSettings(containerEl, this.plugin);
-    SettingTab.addDevSettings(containerEl, this.plugin);
+    this.addDevSettings(containerEl, this.plugin);
+  }
+
+  private sendSettingsChanged(type: SettingsType): void {
+    this.messenger.send("settings_changed", {
+      type: type,
+      settings: this.plugin.settings
+    });
   }
 
   private addEndpointSettings(containerEl: HTMLElement, plugin: TracksPlugin) {
+    let sendSettingsChanged = () => this.sendSettingsChanged(SettingsType.Endpoint);
+
     new SettingGroup(containerEl)
       .setHeading(t("settings.header-endpoint"))
       .addSetting(setting => setting
@@ -35,6 +43,7 @@ export class SettingTab extends PluginSettingTab {
 
             plugin.settings.endpoint.url = value;
             await plugin.saveSettings();
+            sendSettingsChanged();
           })))
       .addSetting(setting => setting
         .setName(t("settings.endpoint-username-header"))
@@ -44,21 +53,25 @@ export class SettingTab extends PluginSettingTab {
           .onChange(async (value) => {
             plugin.settings.endpoint.username = value;
             await plugin.saveSettings();
+            sendSettingsChanged();
           })))
       .addSetting(setting => setting
-          .setName(t("settings.endpoint-secret-header"))
-          .setDesc(t("settings.endpoint-secret-description"))
-          .addComponent(el => new SecretComponent(this.app, el)
-            .setValue(plugin.settings.endpoint.secret)
-            .onChange(async (value) => {
-              plugin.settings.endpoint.secret = value ?? "";
-              await plugin.saveSettings();
-            })
-          )
+        .setName(t("settings.endpoint-secret-header"))
+        .setDesc(t("settings.endpoint-secret-description"))
+        .addComponent(el => new SecretComponent(this.app, el)
+          .setValue(plugin.settings.endpoint.secret)
+          .onChange(async (value) => {
+            plugin.settings.endpoint.secret = value ?? "";
+            await plugin.saveSettings();
+            sendSettingsChanged();
+          })
+        )
       );
   }
 
-  private static addDevSettings(containerEl: HTMLElement, plugin: TracksPlugin) {
+  private addDevSettings(containerEl: HTMLElement, plugin: TracksPlugin) {
+    let sendSettingsChanged = () => this.sendSettingsChanged(SettingsType.Debugging);
+
     new SettingGroup(containerEl)
       .setHeading(t("settings.header-debugging"))
       .addSetting(x => x
@@ -69,6 +82,7 @@ export class SettingTab extends PluginSettingTab {
           x.onChange(async (value) => {
             plugin.settings.debug.enableConsoleLogging = value;
             await plugin.saveSettings();
+            sendSettingsChanged();
           });
         }));
   }

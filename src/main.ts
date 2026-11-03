@@ -59,7 +59,7 @@ export default class TracksPlugin extends Plugin {
     await this.loadSettingsAndInitialize();
 
     // This adds a settings tab so the user can configure various aspects of the plugin
-    this.addSettingTab(new SettingTab(this.app, this));
+    this.addSettingTab(new SettingTab(this.app, this, this.messenger));
 
     // Sidebar
     this.addRibbonIcon("square-check-big", t("commands.open-dashboard"), async () => {
