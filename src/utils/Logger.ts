@@ -48,10 +48,6 @@ export class Logger implements ILogger {
   }
 
   private handleSettingsChanged(args: SettingsChangedEventArgs) {
-    if (args.type != SettingsType.Debugging) {
-      return;
-    }
-
     this.setLoggers(args.settings.debug.enableConsoleLogging);
   }
 

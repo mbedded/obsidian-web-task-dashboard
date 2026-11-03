@@ -3,6 +3,7 @@ import type { IMessenger } from "../messenger/IMessenger";
 import { t } from "../localizer/Localizer";
 
 export interface ITracksPluginSettings {
+  // todo: rework those to match the new declarative settings
   // A version to enable migrations if breaking changes are made in the future
   version: number;
   // Endpoint settings

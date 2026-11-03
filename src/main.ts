@@ -1,4 +1,4 @@
-import { type App, Notice, Plugin, type PluginManifest, requestUrl, WorkspaceLeaf } from "obsidian";
+import { type App, debounce, type Debouncer, Notice, Plugin, type PluginManifest, requestUrl, WorkspaceLeaf } from "obsidian";
 import { DEFAULT_SETTINGS, EndpointType, type ITracksPluginSettings } from "./settings/Settings";
 import { MainViewModel, VIEW_TYPE_MAIN } from "./views/MainViewModel";
 import { initializeLocalization } from "./main.localization";
@@ -11,7 +11,7 @@ import type { ITaskAdapter } from "./adapters/ITaskAdapter";
 import { Helpers } from "./utils/Helpers";
 import { EditTaskModal } from "./modals/EditTaskModal";
 import { Logger } from "./utils/Logger";
-import { type IMessenger, SettingsType } from "./messenger/IMessenger";
+import { type IMessenger } from "./messenger/IMessenger";
 import { DoNothingAdapter } from "./adapters/DoNothingAdapter";
 
 export default class TracksPlugin extends Plugin {
@@ -23,12 +23,15 @@ export default class TracksPlugin extends Plugin {
   private adapter: ITaskAdapter | undefined | null;
 
   public declare settings: ITracksPluginSettings;
+  private notifySettingsChanged: Debouncer<[], void>;
 
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
 
     this.logger = new Logger();
     this.messenger = new SimpleMessenger(this.logger);
+    this.notifySettingsChanged = debounce(() => this.messenger.send("settings_changed", {settings: this.settings}), 500, true);
+
     this.logger.initialize(this.messenger);
 
     initializeLocalization();
@@ -55,10 +58,6 @@ export default class TracksPlugin extends Plugin {
     );
 
     this.messenger.on("settings_changed", args => {
-      if (args.type != SettingsType.Endpoint) {
-        return;
-      }
-
       // We reset the view and the adapter.
       // The user must open the view again, to use the new endpoint.
       this.app.workspace.detachLeavesOfType(VIEW_TYPE_MAIN);
@@ -70,7 +69,7 @@ export default class TracksPlugin extends Plugin {
     await this.loadSettingsAndInitialize();
 
     // This adds a settings tab so the user can configure various aspects of the plugin
-    this.addSettingTab(new SettingTab(this.app, this, this.messenger));
+    this.addSettingTab(new SettingTab(this.app, this));
 
     // Sidebar
     this.addRibbonIcon("square-check-big", t("commands.open-dashboard"), async () => {
@@ -128,9 +127,15 @@ export default class TracksPlugin extends Plugin {
     this.logger.setLoggers(this.settings.debug.enableConsoleLogging);
   }
 
-  async saveSettings() {
-    await this.saveData(this.settings);
+
+  saveData(data: any): Promise<void> {
+    console.log("save data");
+    this.notifySettingsChanged();
+    // this.notifySettingsChanged();
+    return super.saveData(data);
   }
+
+
 
   private getAdapter(): ITaskAdapter {
     if (this.adapter == null) {

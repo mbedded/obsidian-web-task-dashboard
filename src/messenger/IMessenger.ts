@@ -33,7 +33,6 @@ export type TaskUpdatedEventArgs = {
 };
 
 export type SettingsChangedEventArgs = {
-  type: SettingsType;
   settings: ITracksPluginSettings;
 };
 
