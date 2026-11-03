@@ -11,7 +11,7 @@ import type { ITaskAdapter } from "./adapters/ITaskAdapter";
 import { Helpers } from "./utils/Helpers";
 import { EditTaskModal } from "./modals/EditTaskModal";
 import { Logger } from "./utils/Logger";
-import type { IMessenger } from "./messenger/IMessenger";
+import { type IMessenger, SettingsType } from "./messenger/IMessenger";
 import { DoNothingAdapter } from "./adapters/DoNothingAdapter";
 
 export default class TracksPlugin extends Plugin {
@@ -20,7 +20,7 @@ export default class TracksPlugin extends Plugin {
 
   private readonly messenger: IMessenger;
   private readonly logger: Logger;
-  private adapter: ITaskAdapter | undefined;
+  private adapter: ITaskAdapter | undefined | null;
 
   public declare settings: ITracksPluginSettings;
 
@@ -39,20 +39,31 @@ export default class TracksPlugin extends Plugin {
     this.messenger.on("show_notice", message => {
         this.showNotice(message);
       }
-    )
+    );
 
     this.messenger.on("show_notice_error", message => {
         message = `${t("notice.prefix-error")}: ${message}`;
         this.showNotice(message, TracksPlugin.ERROR_NOTICE_TIME);
       }
-    )
+    );
 
     this.messenger.on("update_task", task => {
         const clone = Helpers.clone(task);
         const adapter = this.getAdapter();
         new EditTaskModal(this.app, adapter, clone, this.messenger).open();
       }
-    )
+    );
+
+    this.messenger.on("settings_changed", args => {
+      if (args.type != SettingsType.Endpoint) {
+        return;
+      }
+
+      // We reset the view and the adapter.
+      // The user must open the view again, to use the new endpoint.
+      this.app.workspace.detachLeavesOfType(VIEW_TYPE_MAIN);
+      this.adapter = null;
+    });
   }
 
   async onload() {
@@ -122,9 +133,9 @@ export default class TracksPlugin extends Plugin {
   }
 
   private getAdapter(): ITaskAdapter {
-    if (this.adapter == null){
+    if (this.adapter == null) {
       let endpoint = this.settings.endpoint;
-      switch (endpoint.type){
+      switch (endpoint.type) {
         case EndpointType.Tracks:
           this.adapter = new TracksAdapter(endpoint.url, this.settings.getBasicToken(this.app, this.messenger), requestUrl, this.messenger, this.logger);
           break;
