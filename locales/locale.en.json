@@ -55,6 +55,7 @@
     "error-deleting-task": "Error deleting task.",
     "error-getting-contexts": "Error getting contexts.",
     "error-getting-tasks": "Error getting tasks.",
+    "error-secret-not-found": "Secret with the name '{secret}' not found or the content is empty.",
     "error-setting-task-done": "Error setting task as 'done'.",
     "error-unknown-endpoint-type": "Unknown endpoint type. Please check your settings.",
     "error-updating-task": "Error updating task.",

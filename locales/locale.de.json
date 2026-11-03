@@ -55,6 +55,7 @@
     "error-deleting-task": "Fehler beim Löschen der Aufgabe.",
     "error-getting-contexts": "Fehler beim laden der Kontexte.",
     "error-getting-tasks": "Fehler beim Laden der Aufgaben.",
+    "error-secret-not-found": "Geheimnis mit dem Namen '{secret}' nicht gefunden oder der Wert ist leer.",
     "error-setting-task-done": "Fehler beim setzen der Aufgabe als 'erledigt'.",
     "error-unknown-endpoint-type": "Unbekannter Endpunkt-Typ. Bitte überprüfen Sie die Einstellungen.",
     "error-updating-task": "Fehler beim Aktualisieren der Aufgabe.",

@@ -126,7 +126,7 @@ export default class TracksPlugin extends Plugin {
       let endpoint = this.settings.endpoint;
       switch (endpoint.type){
         case EndpointType.Tracks:
-          this.adapter = new TracksAdapter(endpoint.url, this.settings.getBasicToken(), requestUrl, this.messenger, this.logger);
+          this.adapter = new TracksAdapter(endpoint.url, this.settings.getBasicToken(this.app, this.messenger), requestUrl, this.messenger, this.logger);
           break;
 
         default:

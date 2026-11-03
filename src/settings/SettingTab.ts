@@ -55,17 +55,6 @@ export class SettingTab extends PluginSettingTab {
               await plugin.saveSettings();
             })
           )
-
-        // .addText(text => {
-        //     text.setValue(plugin.settings.endpoint.secret)
-        //     text.onChange(async (value) => {
-        //       plugin.settings.endpoint.secret = value;
-        //       await plugin.saveSettings();
-        //     });
-        //     text.inputEl.type = "password";
-        //   }
-        // )
-
       );
   }
 
