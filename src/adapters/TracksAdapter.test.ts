@@ -1,4 +1,4 @@
-import { test, expect, describe } from "vitest";
+import { test, expect, describe, vi } from "vitest";
 import { TracksAdapter } from "./TracksAdapter";
 import type { RequestUrlParam, RequestUrlResponsePromise } from "obsidian";
 import { emptyRequest, realFetchRequest } from "./AdapterHelper.test";
@@ -64,3 +64,37 @@ describe("With valid token", () => {
   });
 })
 
+describe("Cache", () => {
+  test("Get contexts should return cached items", async () => {
+    // For test, we simply return a empty list.
+    const fetchMock = vi.fn().mockReturnValue([]);
+    const sut = getInstance(TOKEN_LOCALHOST, fetchMock);
+
+    const result = await sut.getActiveContextsFromCache();
+    expect(result).toEqual([]);
+
+    // Execute additional calls
+    for (let i = 0; i < 5; i++) {
+      await sut.getActiveContextsFromCache();
+    }
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("Reset cache causes new requests", async () =>{
+    // For test, we simply return a empty list.
+    const fetchMock = vi.fn().mockReturnValue([]);
+    const sut = getInstance(TOKEN_LOCALHOST, fetchMock);
+
+    const result = await sut.getActiveContextsFromCache();
+    expect(result).toEqual([]);
+
+    // Execute additional calls
+    for (let i = 0; i < 5; i++) {
+      sut.resetCache();
+      await sut.getActiveContextsFromCache();
+    }
+
+    expect(fetchMock).toHaveBeenCalledTimes(6);
+  });
+});

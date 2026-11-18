@@ -18,6 +18,10 @@ export class DoNothingAdapter implements ITaskAdapter {
     return Promise.resolve([]);
   }
 
+  getActiveContextsFromCache(): Promise<ContextItem[]> {
+    return Promise.resolve([]);
+  }
+
   getDisplayInfo(): string {
     return "DoNothingAdapter";
   }
@@ -34,4 +38,6 @@ export class DoNothingAdapter implements ITaskAdapter {
     return Promise.resolve(new TaskItem(0, 0, "", ""));
   }
 
+  resetCache(): void {
+  }
 }

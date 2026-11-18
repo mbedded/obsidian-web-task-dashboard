@@ -27,6 +27,14 @@ export interface ITaskAdapter {
   getActiveContexts(): Promise<ContextItem[]>;
 
   /**
+   * Retrieves the active context items from the cache.
+   * If the cache is empty, a web request is made to fetch the active contexts..
+   *
+   * @return A promise that resolves to an array of active cached context items.
+   */
+  getActiveContextsFromCache(): Promise<ContextItem[]>;
+
+  /**
    * Retrieves a list of tasks for a given context.
    *
    * @return {Promise<TaskItem[]>} A promise that resolves to an array of task objects.
@@ -69,4 +77,10 @@ export interface ITaskAdapter {
    * @return {Promise<TaskItem>} A promise that resolves to the updated TaskItem.
    */
   updateTask(taskId: number, contextId: number, title: string, description: string): Promise<TaskItem>;
+
+
+  /**
+   * Clears any cached data maintained by this instance.
+   */
+  resetCache(): void;
 }

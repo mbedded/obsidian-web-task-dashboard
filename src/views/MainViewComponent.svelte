@@ -6,7 +6,6 @@
   import ContextComponent from "./ContextComponent.svelte";
   import ErrorComponent from "./ErrorComponent.svelte";
   import { onMount } from "svelte";
-  import { SimpleMessenger } from "../messenger/SimpleMessenger";
   import type { IMessenger } from "../messenger/IMessenger";
 
   interface Props {
@@ -55,7 +54,7 @@
 
     // Initialize view when authentication is ok
     if (pingResult.isOk()) {
-      contexts = await adapter.getActiveContexts();
+      contexts = await adapter.getActiveContextsFromCache();
     }
 
     loading = false;

@@ -15,6 +15,8 @@ export class TracksAdapter implements ITaskAdapter {
     ignoreDeclaration: true
   });
 
+  private activeContexts: ContextItem[] | null = null;
+
   /**
    * Creates a new instance.
    * @param baseUrl The base url to reach Tracks.
@@ -102,6 +104,15 @@ export class TracksAdapter implements ITaskAdapter {
       .filter((x) => x.state === "active")
       .map((x) => new ContextItem(x["id"], String(x["name"])))
       .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  public async getActiveContextsFromCache(): Promise<ContextItem[]> {
+    if (this.activeContexts == null) {
+      let contexts = await this.getActiveContexts();
+      this.activeContexts = contexts;
+    }
+
+    return Promise.resolve(this.activeContexts);
   }
 
   public async getActiveTasks(contextId: number): Promise<TaskItem[]> {
@@ -202,7 +213,7 @@ export class TracksAdapter implements ITaskAdapter {
     }
   }
 
-  public async updateTask(taskId: number, contextId: number, title: string, description: string): Promise<TaskItem>{
+  public async updateTask(taskId: number, contextId: number, title: string, description: string): Promise<TaskItem> {
     try {
       const xmlBody = `<todo>
     <description>${title}</description>
@@ -226,5 +237,9 @@ export class TracksAdapter implements ITaskAdapter {
       this.logger.error("Error updating task", e);
       throw e;
     }
+  }
+
+  resetCache(): void {
+    this.activeContexts = null;
   }
 }

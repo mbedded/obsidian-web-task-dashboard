@@ -4,25 +4,20 @@ import CreateTaskComponent from "./CreateTaskComponent.svelte";
 import type { ITaskAdapter } from "../adapters/ITaskAdapter";
 import { t } from "../localizer/Localizer";
 import type { IMessenger } from "../messenger/IMessenger";
+import type { ContextItem } from "../adapters/TaskClasses";
 
 export class CreateTaskModal extends Modal {
-  private readonly adapter: ITaskAdapter;
-  private readonly messenger: IMessenger;
   private view: ReturnType<typeof CreateTaskComponent> | null = null;
 
-  constructor(app: App, adapter: ITaskAdapter, messenger: IMessenger) {
+  constructor(app: App,
+              private adapter: ITaskAdapter,
+              private messenger: IMessenger,
+              private contexts: ContextItem[]) {
     super(app);
-    this.adapter = adapter;
-    this.messenger = messenger;
   }
 
   async onOpen() {
-    // todo: add something like a cache to avoid multiple requests every time a task is created
-    // add error handling. Ensure there are contexts available.
-    // Maybe the contexts should be passed from outside *before* opening the modal.
-    const contexts = await this.adapter.getActiveContexts();
-
-    if (contexts.length === 0) {
+    if (this.contexts.length === 0) {
       this.messenger.send("show_notice_error", t("notice.no-contexts-available"));
       this.close();
       return;
@@ -31,7 +26,7 @@ export class CreateTaskModal extends Modal {
     this.view = mount(CreateTaskComponent, {
       target: this.contentEl,
       props: {
-        contexts: contexts,
+        contexts: this.contexts,
         onSubmit: this.onSubmit.bind(this)
       }
     });
