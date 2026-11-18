@@ -1,4 +1,4 @@
-import { type IMessenger, type SettingsChangedEventArgs, SettingsType } from "../messenger/IMessenger";
+import { type IMessenger, type SettingsChangedEventArgs } from "../messenger/IMessenger";
 
 /**
  * Represents a logging interface that provides methods for logging messages
@@ -48,11 +48,7 @@ export class Logger implements ILogger {
   }
 
   private handleSettingsChanged(args: SettingsChangedEventArgs) {
-    if (args.type != SettingsType.Debugging) {
-      return;
-    }
-
-    this.setLoggers(args.settings.debug.enableConsoleLogging);
+    this.setLoggers(args.settings.debugEnableConsoleLogging);
   }
 
   public setLoggers(enableConsoleLogging: boolean) {

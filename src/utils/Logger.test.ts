@@ -1,6 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
 import { Logger } from "./Logger";
-import { SettingsType } from "../messenger/IMessenger";
 import { SimpleMessenger } from "../messenger/SimpleMessenger";
 import { DEFAULT_SETTINGS } from "../settings/Settings";
 import { NullLogger } from "./TestUtils";
@@ -63,7 +62,7 @@ describe("Via settings", () => {
 
 describe("Via settingsChanged event", () => {
 
-  test("Invalid event type, setLoggers is not called", () => {
+  test("setLoggers is called", () => {
     const sut = getInstance();
     const spy = vi.spyOn(sut, "setLoggers")
       .mockImplementation((x) => {
@@ -71,23 +70,9 @@ describe("Via settingsChanged event", () => {
 
     const messenger = getMessenger();
     sut.initialize(messenger);
-    messenger.send("settings_changed", {type: SettingsType.Endpoint, settings: DEFAULT_SETTINGS});
+    messenger.send("settings_changed", {settings: DEFAULT_SETTINGS});
 
-    expect(spy).not.toHaveBeenCalled();
-    spy.mockRestore();
-  });
-
-  test("Valid event type, setLoggers is called", () => {
-    const sut = getInstance();
-    const spy = vi.spyOn(sut, "setLoggers")
-      .mockImplementation((x) => {
-      });
-
-    const messenger = getMessenger();
-    sut.initialize(messenger);
-    messenger.send("settings_changed", {type: SettingsType.Debugging, settings: DEFAULT_SETTINGS});
-
-    expect(spy).toHaveBeenCalledWith(DEFAULT_SETTINGS.debug.enableConsoleLogging);
+    expect(spy).toHaveBeenCalledWith(DEFAULT_SETTINGS.debugEnableConsoleLogging);
     spy.mockRestore();
   });
 

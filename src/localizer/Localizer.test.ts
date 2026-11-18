@@ -26,6 +26,7 @@ describe("pass values and verify resolve", () => {
     sut.add("en", {key1: "value1"});
 
     const result = sut.translate("key1");
+
     expect(result).toBe("value1");
   })
 
@@ -44,7 +45,7 @@ describe("pass values and verify resolve", () => {
 
   test("give missing key, expect key returned", () => {
     const sut = localizer;
-    sut.setLocale("asdasdsad");
+    sut.setLocale("dummy");
     sut.add("de", {key1: "en-value1"});
 
     const result = sut.translate("missing-key");
