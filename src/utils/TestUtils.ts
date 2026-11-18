@@ -1,4 +1,4 @@
-// This file contains utilities for testing purposes only
+// This file contains utilities for testing purposes only.
 
 import type { EventMap, IMessenger } from "../messenger/IMessenger";
 import type { ILogger } from "./Logger";

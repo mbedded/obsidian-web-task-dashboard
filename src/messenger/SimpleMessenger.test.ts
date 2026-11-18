@@ -14,15 +14,19 @@ test("Create listeners, ensure events are raised", () => {
   const sut = getInstance();
 
   let reloadRaised = false;
-  const loginRaised = false;
+  let settingsChanged = false;
 
   sut.on("reload", () => {
     reloadRaised = true;
   });
 
+  sut.on("settings_changed", () => {
+    settingsChanged = true;
+  });
+
   sut.send("reload", undefined);
 
   expect(reloadRaised).toBeTruthy();
-  expect(loginRaised).toBeFalsy();
+  expect(settingsChanged).toBeFalsy();
 })
 

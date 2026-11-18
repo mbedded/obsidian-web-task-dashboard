@@ -1,6 +1,9 @@
 import type { ITaskAdapter } from "./ITaskAdapter";
 import { ContextItem, PingResult, TaskItem } from "./TaskClasses";
 
+/**
+ * This is a dummy adapter that does nothing.
+ */
 export class DoNothingAdapter implements ITaskAdapter {
   createTask(contextId: number, title: string, description: string): Promise<TaskItem> {
     return Promise.resolve(new TaskItem(0, 0, "", ""));

@@ -14,6 +14,10 @@ import { Logger } from "./utils/Logger";
 import { type IMessenger } from "./messenger/IMessenger";
 import { DoNothingAdapter } from "./adapters/DoNothingAdapter";
 
+/**
+ * This is the main class of the TracksPlugin.
+ * It manages the initial setup, configuration and reacts to events.
+ */
 export default class TracksPlugin extends Plugin {
   private static readonly DEFAULT_NOTICE_TIME: number = 3000;
   private static readonly ERROR_NOTICE_TIME: number = 15000;

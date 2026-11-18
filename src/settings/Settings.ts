@@ -1,7 +1,3 @@
-import type { App } from "obsidian";
-import type { IMessenger } from "../messenger/IMessenger";
-import { t } from "../localizer/Localizer";
-
 export interface ITracksPluginSettings {
   // Endpoint
   endpointType: EndpointType,
