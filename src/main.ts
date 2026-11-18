@@ -20,10 +20,10 @@ export default class TracksPlugin extends Plugin {
 
   private readonly messenger: IMessenger;
   private readonly logger: Logger;
+  private readonly notifySettingsChanged: Debouncer<[], void>;
   private adapter: ITaskAdapter | undefined | null;
 
   public declare settings: ITracksPluginSettings;
-  private notifySettingsChanged: Debouncer<[], void>;
 
   constructor(app: App, manifest: PluginManifest) {
     super(app, manifest);
@@ -129,9 +129,10 @@ export default class TracksPlugin extends Plugin {
 
 
   saveData(data: any): Promise<void> {
-    console.log("save data");
+    // We changed the settings to use Obsidian's declarative API.
+    // So we have to react on the general "save data" event to detect if settings of our plugin have changed.
+    // With a debouncer we reduce the number of events sent to the components.
     this.notifySettingsChanged();
-    // this.notifySettingsChanged();
     return super.saveData(data);
   }
 

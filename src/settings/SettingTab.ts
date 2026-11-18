@@ -8,19 +8,7 @@ export class SettingTab extends PluginSettingTab {
     super(app, plugin);
   }
 
-  update() {
-    console.log("settings update");
-    super.update();
-  }
-
-  hide() {
-    console.log("settings hide");
-    super.hide();
-  }
-
   getSettingDefinitions(): SettingDefinitionItem[] {
-    console.log("get definitions");
-
     return [
       this.getEndpointSettingsGroup(),
       this.getDebugSettingsGroup()
