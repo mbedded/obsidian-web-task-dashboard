@@ -1,6 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
 import { Logger } from "./Logger";
-import { SettingsType } from "../messenger/IMessenger";
 import { SimpleMessenger } from "../messenger/SimpleMessenger";
 import { DEFAULT_SETTINGS } from "../settings/Settings";
 import { NullLogger } from "./TestUtils";
@@ -73,7 +72,7 @@ describe("Via settingsChanged event", () => {
     sut.initialize(messenger);
     messenger.send("settings_changed", {settings: DEFAULT_SETTINGS});
 
-    expect(spy).toHaveBeenCalledWith(DEFAULT_SETTINGS.debug.enableConsoleLogging);
+    expect(spy).toHaveBeenCalledWith(DEFAULT_SETTINGS.debugEnableConsoleLogging);
     spy.mockRestore();
   });
 

@@ -124,7 +124,7 @@ export default class TracksPlugin extends Plugin {
   async loadSettingsAndInitialize() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 
-    this.logger.setLoggers(this.settings.debug.enableConsoleLogging);
+    this.logger.setLoggers(this.settings.debugEnableConsoleLogging);
   }
 
 
@@ -139,15 +139,15 @@ export default class TracksPlugin extends Plugin {
 
   private getAdapter(): ITaskAdapter {
     if (this.adapter == null) {
-      let endpoint = this.settings.endpoint;
-      switch (endpoint.type) {
+      let endpointType = this.settings.endpointType;
+      switch (this.settings.endpointType) {
         case EndpointType.Tracks:
-          this.adapter = new TracksAdapter(endpoint.url, this.settings.getBasicToken(this.app, this.messenger), requestUrl, this.messenger, this.logger);
+          this.adapter = new TracksAdapter(this.settings.endpointUrl, this.settings.getBasicToken(this.app, this.messenger), requestUrl, this.messenger, this.logger);
           break;
 
         default:
           this.messenger.send("show_notice_error", t("notice.error-unknown-endpoint-type"));
-          this.logger.error(`Unknown endpoint type: ${endpoint.type}`);
+          this.logger.error(`Unknown endpoint type: ${endpointType}`);
           return new DoNothingAdapter();
       }
     }
